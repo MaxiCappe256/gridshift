@@ -1,18 +1,20 @@
-'use client';
-import { useAppointment } from '@/hooks/appointments/useAppointment';
-import { useAppointmentUpdate } from '@/hooks/appointments/useAppointmentUpdate';
-import { useParams, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import AppointmentForm from '@/components/AppointmentForm';
+"use client";
+import { useAppointment } from "@/hooks/appointments/useAppointment";
+import { useAppointmentUpdate } from "@/hooks/appointments/useAppointmentUpdate";
+import { useParams, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import AppointmentForm from "@/components/AppointmentForm";
+import { useAppointmentDelete } from "@/hooks/appointments/useAppointmentDelete";
 
 export default function EditAppointmentPage() {
   const params = useParams();
   const searchParams = useSearchParams();
-  const clientId = Number(searchParams.get('clientId'));
+  const clientId = Number(searchParams.get("clientId"));
   const id = Number(params.id);
 
   const { data: appointment, isLoading } = useAppointment(id);
   const { mutate: updateAppointment, isPending } = useAppointmentUpdate(id);
+  const { mutate: deleteAppointment } = useAppointmentDelete();
 
   const client = appointment?.clients?.find((c) => c.id === clientId);
 
@@ -21,7 +23,7 @@ export default function EditAppointmentPage() {
   }
 
   return (
-    <div className="h-screen overflow-y-hidden flex items-center justify-center">
+    <div className="flex flex-col items-center justify-center min-h-[80vh] py-4">
       <div className="flex flex-col gap-5 justify-between items-center">
         <Link
           href="/"
@@ -42,9 +44,10 @@ export default function EditAppointmentPage() {
           onSubmit={({ day, hour }) => {
             updateAppointment({ day, hour });
           }}
-          submitLabel={isPending ? 'Editando...' : 'Editar'}
+          onDelete={() => deleteAppointment(Number(id))}
+          submitLabel={isPending ? "Editando..." : "Editar"}
           lockDateTime={false}
-          clientName={client ? `${client.name} ${client.surname}` : ''}
+          clientName={client ? `${client.name} ${client.surname}` : ""}
         />
       </div>
     </div>

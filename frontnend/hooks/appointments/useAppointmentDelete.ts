@@ -3,23 +3,24 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-export function useAppointmentUpdate(id: number) {
+export function useAppointmentDelete() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
   return useMutation({
-    mutationFn: async (data: any) => {
-      const res = await api.patch(`/appointments/${id}`, data);
+    mutationFn: async (id: number) => {
+      const res = await api.delete(`/appointments/${id}`);
       return res.data;
     },
     onSuccess: () => {
-      toast.success("Turno actualizado correctamente");
-      queryClient.invalidateQueries({ queryKey: ["appointment", id] });
+      toast.success("Turno eliminado correctamente");
       queryClient.invalidateQueries({ queryKey: ["appointments"] });
       router.push("/");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Error al actualizar");
+      toast.error(
+        error.response?.data?.message || "Error al eliminar el turno",
+      );
     },
   });
 }

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useAppointments } from '@/hooks/appointments/useAppointments';
-import { DAYS, HOURS } from '@/lib/calendar';
-import { useRouter } from 'next/navigation';
-import { Fragment } from 'react';
+import { useAppointments } from "@/hooks/appointments/useAppointments";
+import { DAYS, HOURS } from "@/lib/calendar";
+import { useRouter } from "next/navigation";
+import { Fragment } from "react";
 
 export default function HomePage() {
   const { data = [], isLoading, isError } = useAppointments();
@@ -14,33 +14,33 @@ export default function HomePage() {
     return <p className="p-6 text-red-500">Error al cargar los turnos</p>;
 
   return (
-    <div className="space-y-6  px-6 py-8">
+    <div className="space-y-6 p-2">
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold underline">Agenda semanal</h1>
+      <div className="flex flex-col sm:flex-row justify-between items-center">
+        <h1 className="text-4xl text-center sm:text-left mb-5 font-bold underline">
+          Agenda semanal
+        </h1>
 
         <div className="flex gap-6">
           <button
-            onClick={() => router.push('/appointments/new')}
-            className="bg-green-700 cursor-pointer hover:scale-110 hover:bg-green-800 transition text-white py-2 px-4 rounded-lg text-lg"
+            onClick={() => router.push("/appointments/new")}
+            className="bg-green-700 w-[50%] sm:w-auto text-center cursor-pointer hover:scale-110 hover:bg-green-800 transition text-white py-2 px-4 rounded-lg text-lg"
           >
             Agregar Turno
           </button>
 
           <button
-            onClick={() => router.push('/clients')}
-            className="bg-slate-500 cursor-pointer hover:scale-110 hover:bg-slate-800 transition text-white py-2 px-4 rounded-lg text-lg"
+            onClick={() => router.push("/clients")}
+            className="bg-slate-500 w-[50%] sm:w-auto text-center cursor-pointer hover:scale-110 hover:bg-slate-800 transition text-white py-2 px-4 rounded-lg text-lg"
           >
             Ver Clientes
           </button>
         </div>
       </div>
 
-      {/* Calendario */}
       <div className="overflow-x-auto">
         <div className="min-w-[900px] bg-white rounded-xl shadow-md">
           <div className="grid grid-cols-6 border text-sm">
-            {/* Header */}
             <div className="border p-3 font-bold bg-gray-50">Hora</div>
 
             {DAYS.map((day) => (
@@ -52,15 +52,12 @@ export default function HomePage() {
               </div>
             ))}
 
-            {/* Filas */}
             {HOURS.map((hour) => (
               <Fragment key={hour}>
-                {/* Columna hora */}
                 <div className="border p-3 font-semibold bg-gray-50">
                   {hour.slice(0, 5)}
                 </div>
 
-                {/* Celdas */}
                 {DAYS.map((day) => {
                   const appointment = data.find(
                     (a: any) => a.day === day && a.hour === hour,

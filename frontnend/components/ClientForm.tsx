@@ -1,8 +1,8 @@
-'use client';
-import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+"use client";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 type ClientFormData = {
   name: string;
@@ -39,14 +39,14 @@ export default function ClientForm({
     },
   });
 
-  const paidValue = watch('paid');
+  const paidValue = watch("paid");
 
   const handleInternalSubmit = (data: ClientFormData) => {
     const formattedData = {
       name: data.name,
       surname: data.surname,
       age: Number(data.age),
-      paid: String(data.paid) === 'true',
+      paid: String(data.paid) === "true",
       ...(data.phone?.trim() ? { phone: data.phone } : {}),
     };
 
@@ -69,13 +69,16 @@ export default function ClientForm({
 
   return (
     <div>
+      <h1 className="text-3xl font-bold text-center mb-4">
+        {clientId ? "Editar cliente" : "Crear cliente"}
+      </h1>
       <form
         onSubmit={handleSubmit(handleInternalSubmit)}
-        className="flex flex-col border rounded-md shadow-lg gap-6 w-[25vw]  p-4"
+        className="flex flex-col border rounded-md shadow-lg gap-6 w-full max-w-md md:w-[40vw] lg:w-[25vw] p-4 bg-white"
       >
         <input
-          {...register('name', {
-            required: 'Nombre obligatorio',
+          {...register("name", {
+            required: "Nombre obligatorio",
           })}
           type="text"
           className="p-3 border rounded-md text-base outline-none focus:ring-2 focus:ring-green-500"
@@ -83,7 +86,7 @@ export default function ClientForm({
         />
         {errors.name && <p className="text-red-500">{errors.name.message}</p>}
         <input
-          {...register('surname', { required: 'Apellido obligatorio' })}
+          {...register("surname", { required: "Apellido obligatorio" })}
           type="text"
           className="p-3 border rounded-md text-base outline-none focus:ring-2 focus:ring-green-500"
           placeholder="Apellido..."
@@ -95,14 +98,14 @@ export default function ClientForm({
           type="number"
           className="p-3 border rounded-md text-base outline-none focus:ring-2 focus:ring-green-500"
           placeholder="Edad..."
-          {...register('age', {
-            required: 'Edad obligatoria',
+          {...register("age", {
+            required: "Edad obligatoria",
             valueAsNumber: true,
           })}
         />
         {errors.age && <p className="text-red-500">{errors.age.message}</p>}
         <input
-          {...register('phone')}
+          {...register("phone")}
           type="tel"
           className="p-3 border rounded-md text-base outline-none focus:ring-2 focus:ring-green-500"
           placeholder="Telefono (Opcional)..."
@@ -111,14 +114,13 @@ export default function ClientForm({
 
         <div className="flex flex-col gap-3 w-full">
           <div className="flex items-center justify-between bg-white border border-gray-200 p-4 rounded-xl shadow-sm">
-            {/* Opción: Pagó */}
             <label className="flex items-center gap-2 cursor-pointer group">
               <div className="relative flex items-center justify-center">
                 <input
                   type="radio"
                   value="true"
-                  {...register('paid')}
-                  checked={String(paidValue) === 'true'}
+                  {...register("paid")}
+                  checked={String(paidValue) === "true"}
                   className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-full checked:border-green-600 transition-all"
                 />
                 <div className="absolute w-3 h-3 bg-green-600 rounded-full scale-0 peer-checked:scale-100 transition-transform" />
@@ -128,14 +130,13 @@ export default function ClientForm({
               </span>
             </label>
 
-            {/* Opción: No Pagó */}
             <label className="flex items-center gap-2 cursor-pointer group">
               <div className="relative flex items-center justify-center">
                 <input
                   type="radio"
                   value="false"
-                  {...register('paid')}
-                  checked={String(paidValue) === 'false'}
+                  {...register("paid")}
+                  checked={String(paidValue) === "false"}
                   className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-full checked:border-red-600 transition-all"
                 />
                 <div className="absolute w-3 h-3 bg-red-600 rounded-full scale-0 peer-checked:scale-100 transition-transform" />
@@ -147,10 +148,10 @@ export default function ClientForm({
           </div>
         </div>
 
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between gap-5 sm:gap-10 items-center">
           <button
             type="submit"
-            className="bg-green-700 w-full cursor-pointer hover:bg-green-800 transition text-white py-2 px-4 rounded-lg text-lg"
+            className="bg-green-700 w-full hover:scale-110 cursor-pointer hover:bg-green-800 transition text-white py-2 px-4 rounded-lg text-md"
           >
             {submitLabel}
           </button>
@@ -160,14 +161,14 @@ export default function ClientForm({
               type="button"
               onClick={() => {
                 if (
-                  confirm('¿Estas seguro que deseas eliminar este cliente?')
+                  confirm("¿Estas seguro que deseas eliminar este cliente?")
                 ) {
                   onDelete(clientId);
-                  queryClient.invalidateQueries({ queryKey: ['clients'] });
-                  router.push('/clients');
+                  queryClient.invalidateQueries({ queryKey: ["clients"] });
+                  router.push("/clients");
                 }
               }}
-              className="bg-red-700 w-full cursor-pointer hover:scale-110 hover:bg-red-800 transition text-white py-2 px-4 rounded-lg text-lg"
+              className="bg-red-700 w-full cursor-pointer hover:scale-110 hover:bg-red-800 transition text-white py-2 px-4 rounded-lg text-md"
             >
               Eliminar
             </button>

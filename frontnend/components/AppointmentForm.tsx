@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useClients } from '@/hooks/clients/useClients';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useClients } from "@/hooks/clients/useClients";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 type Client = {
   id: number;
@@ -22,43 +22,45 @@ type Props = {
   submitLabel?: string;
   lockDateTime?: boolean;
   clientName?: string;
+  onDelete: (id: number) => void;
 };
 
 export default function AppointmentForm({
   defaultValues,
   onSubmit,
+  onDelete,
   submitLabel,
   lockDateTime,
   clientName,
 }: Props) {
   const DAYS = [
-    'LUNES',
-    'MARTES',
-    'MIERCOLES',
-    'JUEVES',
-    'VIERNES',
-    'SABADO',
-    'DOMINGO',
+    "LUNES",
+    "MARTES",
+    "MIERCOLES",
+    "JUEVES",
+    "VIERNES",
+    "SABADO",
+    "DOMINGO",
   ] as const;
 
   const HOURS = [
-    '08:00:00',
-    '09:00:00',
-    '10:00:00',
-    '11:00:00',
-    '12:00:00',
-    '13:00:00',
-    '14:00:00',
-    '15:00:00',
-    '16:00:00',
-    '17:00:00',
-    '18:00:00',
-    '19:00:00',
-    '20:00:00',
+    "08:00:00",
+    "09:00:00",
+    "10:00:00",
+    "11:00:00",
+    "12:00:00",
+    "13:00:00",
+    "14:00:00",
+    "15:00:00",
+    "16:00:00",
+    "17:00:00",
+    "18:00:00",
+    "19:00:00",
+    "20:00:00",
   ] as const;
 
   const { data: clients = [] } = useClients();
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
   const { register, setValue, handleSubmit, reset } =
@@ -66,11 +68,11 @@ export default function AppointmentForm({
       defaultValues,
     });
 
-  const filteredClients = clients.filter((client) => {
+  const filteredClients = clients.filter((client) =>
     `${client.name} ${client.surname}`
       .toLowerCase()
-      .includes(search.toLowerCase());
-  });
+      .includes(search.toLowerCase()),
+  );
 
   // setear valores iniciales
   useEffect(() => {
@@ -87,7 +89,7 @@ export default function AppointmentForm({
     <div className="flex flex-col gap-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col border rounded-md shadow-lg gap-6 w-[25vw] p-4 bg-white"
+        className="flex flex-col border rounded-md shadow-lg gap-4 sm:gap-6 w-[80vw] sm:w-[30vw] p-4 bg-white"
       >
         <div className="relative flex flex-col gap-2">
           <label className="font-bold text-base text-gray-700">Cliente</label>
@@ -95,8 +97,8 @@ export default function AppointmentForm({
           {/* Si hay clientId inicial, mostramos el nombre fijo (EDICIÓN) */}
           {defaultValues?.clientId ? (
             <div className="p-3 border-2 rounded-md font-bold text-xl bg-gray-100 text-green-700 border-green-700">
-              {clientName || 'Cargando...'}
-              <input type="hidden" {...register('clientId')} />
+              {clientName || "Cargando..."}
+              <input type="hidden" {...register("clientId")} />
             </div>
           ) : (
             /* Si no hay clientId inicial, mostramos el buscador (NUEVO) */
@@ -118,7 +120,7 @@ export default function AppointmentForm({
                       key={client.id}
                       onClick={() => {
                         setSearch(`${client.name} ${client.surname}`);
-                        setValue('clientId', client.id);
+                        setValue("clientId", client.id);
                         setIsOpen(false);
                       }}
                       className="p-2 hover:bg-green-100 cursor-pointer text-sm border-b last:border-none"
@@ -133,7 +135,7 @@ export default function AppointmentForm({
                   )}
                 </ul>
               )}
-              <input type="hidden" {...register('clientId')} />
+              <input type="hidden" {...register("clientId")} />
             </>
           )}
         </div>
@@ -145,11 +147,11 @@ export default function AppointmentForm({
             <input
               disabled
               className="p-3 border rounded-md bg-gray-100 text-gray-500"
-              {...register('day')}
+              {...register("day")}
             />
           ) : (
             <select
-              {...register('day')}
+              {...register("day")}
               className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Seleccionar día</option>
@@ -169,11 +171,11 @@ export default function AppointmentForm({
             <input
               disabled
               className="p-3 border rounded-md bg-gray-100 text-gray-500"
-              {...register('hour')}
+              {...register("hour")}
             />
           ) : (
             <select
-              {...register('hour')}
+              {...register("hour")}
               className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Seleccionar hora</option>
@@ -186,12 +188,32 @@ export default function AppointmentForm({
           )}
         </div>
 
-        <button
-          type="submit"
-          className="bg-green-700 w-full cursor-pointer hover:bg-green-800 transition text-white py-3 px-4 rounded-lg text-lg font-bold shadow-md active:scale-95"
-        >
-          {submitLabel}
-        </button>
+        <div className="flex gap-6 flex-col sm:flex-row">
+          <button
+            type="submit"
+            className="bg-green-700 sm:w-[50%] px-4 py-2 cursor-pointer hover:bg-green-800 transition text-white rounded-lg text-md font-bold shadow-md active:scale-95"
+          >
+            {submitLabel}
+          </button>
+
+          {defaultValues?.clientId && onDelete && (
+            <button
+              type="button"
+              onClick={() => {
+                const appointmentId = (defaultValues as any).id;
+                if (
+                  appointmentId &&
+                  confirm("¿Estás seguro de que querés borrar este turno?")
+                ) {
+                  onDelete(appointmentId);
+                }
+              }}
+              className="bg-red-700 sm:w-[50%] px-4 py-2 cursor-pointer hover:bg-red-800 transition text-white  rounded-lg text-md font-bold shadow-md active:scale-95"
+            >
+              Eliminar Turno
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );
