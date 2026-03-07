@@ -8,33 +8,36 @@ import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class ClientsService {
-
   constructor(
     @InjectRepository(Client)
     private readonly clientRepository: Repository<Client>,
-  ) { }
+  ) {}
 
   async create(createClientDto: CreateClientDto) {
-    const client = await this.clientRepository.create(createClientDto)
-    return await this.clientRepository.save(client)
+    const client = await this.clientRepository.create(createClientDto);
+    return await this.clientRepository.save(client);
   }
 
   async findAll() {
-    const [data, total] = await this.clientRepository.findAndCount();
+    const [data, total] = await this.clientRepository.findAndCount({
+      order: {
+        paid: 'DESC',
+      },
+    });
 
     return {
       data,
-      total
-    }
+      total,
+    };
   }
 
   async findOne(id: number) {
-    const client = await this.clientRepository.findOneBy({ id })
+    const client = await this.clientRepository.findOneBy({ id });
 
     if (!client) {
-      const errors: string[] = []
-      errors.push("El cliente no existe")
-      throw new NotFoundException(errors)
+      const errors: string[] = [];
+      errors.push('El cliente no existe');
+      throw new NotFoundException(errors);
     }
 
     return client;
@@ -43,23 +46,23 @@ export class ClientsService {
   async update(id: number, updateClientDto: UpdateClientDto) {
     const client = await this.clientRepository.preload({
       id,
-      ...updateClientDto
-    })
+      ...updateClientDto,
+    });
 
     if (!client) {
-      const errors: string[] = []
-      errors.push("El cliente no existe")
-      throw new NotFoundException(errors)
+      const errors: string[] = [];
+      errors.push('El cliente no existe');
+      throw new NotFoundException(errors);
     }
 
-    return await this.clientRepository.save(client)
+    return await this.clientRepository.save(client);
   }
 
   async remove(id: number) {
-    const client = await this.findOne(id)
+    const client = await this.findOne(id);
 
-    await this.clientRepository.remove(client)
+    await this.clientRepository.remove(client);
 
-    return { message: "Cliente eliminado correctamente" }
+    return { message: 'Cliente eliminado correctamente' };
   }
 }

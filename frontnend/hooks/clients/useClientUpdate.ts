@@ -8,17 +8,16 @@ type Client = {
   surname: string;
   age: number;
   paid: boolean;
-}
+};
 
 type UpdatedClientArgs = {
   id: string;
-  data: Partial<Client>
-}
+  data: Partial<Client>;
+};
 
 export function useClientUpdate() {
-
-  const router = useRouter()
-  const queryClient = useQueryClient()
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation<Client, any, UpdatedClientArgs>({
     //tipado
@@ -26,16 +25,17 @@ export function useClientUpdate() {
     //el error
     //lo que recibe el mutate
     mutationFn: async ({ id, data }) => {
-      const res = await api.patch(`/clients/${id}`, data)
-      return res.data
+      const res = await api.patch(`/clients/${id}`, data);
+      return res.data;
     },
-    onSuccess: () => {
-      toast.success("Usuario actualizado correctamente")
-      queryClient.invalidateQueries({ queryKey: ['clients'] })
-      router.push('/clients')
+    onSuccess: (data, variables) => {
+      toast.success("Usuario actualizado correctamente");
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      queryClient.invalidateQueries({ queryKey: ["client", variables.id] });
+      router.push("/clients");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message)
-    }
-  })
+      toast.error(error.response?.data?.message);
+    },
+  });
 }

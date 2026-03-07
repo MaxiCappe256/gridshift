@@ -2,9 +2,19 @@
 
 import { useClients } from "@/hooks/clients/useClients";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function ClientsPage() {
   const { data, isLoading, isError } = useClients();
+
+  const [search, setSearch] = useState("");
+
+  const clients = data?.data?.filter((client) =>
+    `${client.name} ${client.surname}`
+      .toLowerCase()
+      .includes(search.toLowerCase()),
+  );
+
   if (isLoading) return <p className="p-6">Cargando clientes...</p>;
   if (isError)
     return <p className="p-6 text-red-500">Error al cargar los clientes </p>;
@@ -15,6 +25,14 @@ export default function ClientsPage() {
         <h1 className="text-4xl sm:text-left text-center mb-5 font-bold underline">
           Clientes
         </h1>
+
+        <input
+          type="text"
+          placeholder="Buscar cliente..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border p-2 rounded-md mb-4 w-full max-w-md"
+        />
         <div className="flex justify-between items-center gap-4">
           <Link
             href="/clients/new"
@@ -31,11 +49,15 @@ export default function ClientsPage() {
         </div>
       </div>
 
-      {!data?.length ? (
+      <h3 className="mt-4 text-2xl">
+        Total clientes:<span className="font-bold"> {data?.total}</span>{" "}
+      </h3>
+
+      {!clients?.length ? (
         <p className="text-red-500 mt-5">No hay clientes...</p>
       ) : (
         <ul className="list-none mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {data?.map((client: any) => (
+          {clients?.map((client: any) => (
             <li
               key={client.id}
               className="border p-5 rounded-xl shadow-sm bg-white font-bold text-center flex flex-col justify-center gap-2 hover:shadow-md transition-shadow"

@@ -33,33 +33,25 @@ export default function AppointmentForm({
   lockDateTime,
   clientName,
 }: Props) {
-  const DAYS = [
-    "LUNES",
-    "MARTES",
-    "MIERCOLES",
-    "JUEVES",
-    "VIERNES",
-    "SABADO",
-    "DOMINGO",
-  ] as const;
+  const DAYS = ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"] as const;
 
   const HOURS = [
+    "07:00:00",
     "08:00:00",
     "09:00:00",
     "10:00:00",
     "11:00:00",
-    "12:00:00",
     "13:00:00",
     "14:00:00",
     "15:00:00",
     "16:00:00",
     "17:00:00",
-    "18:00:00",
-    "19:00:00",
-    "20:00:00",
   ] as const;
 
-  const { data: clients = [] } = useClients();
+  // Corregimos la extracción de datos: entramos a .data del objeto {data, total}
+  const { data: clientsResponse } = useClients();
+  const clients = clientsResponse?.data || [];
+
   const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -74,12 +66,10 @@ export default function AppointmentForm({
       .includes(search.toLowerCase()),
   );
 
-  // setear valores iniciales
   useEffect(() => {
     if (defaultValues) {
       reset(defaultValues);
     }
-
     if (clientName) {
       setSearch(clientName);
     }
@@ -94,14 +84,12 @@ export default function AppointmentForm({
         <div className="relative flex flex-col gap-2">
           <label className="font-bold text-base text-gray-700">Cliente</label>
 
-          {/* Si hay clientId inicial, mostramos el nombre fijo (EDICIÓN) */}
           {defaultValues?.clientId ? (
             <div className="p-3 border-2 rounded-md font-bold text-xl bg-gray-100 text-green-700 border-green-700">
               {clientName || "Cargando..."}
               <input type="hidden" {...register("clientId")} />
             </div>
           ) : (
-            /* Si no hay clientId inicial, mostramos el buscador (NUEVO) */
             <>
               <input
                 type="text"
@@ -188,15 +176,17 @@ export default function AppointmentForm({
           )}
         </div>
 
-        <div className="flex gap-6 flex-col sm:flex-row">
+        {/* BOTONES ADAPTABLES */}
+        <div className="flex gap-4 w-full">
           <button
             type="submit"
-            className="bg-green-700 sm:w-[50%] px-4 py-2 cursor-pointer hover:bg-green-800 transition text-white rounded-lg text-md font-bold shadow-md active:scale-95"
+            className="bg-green-700 flex-1 px-4 py-2 cursor-pointer hover:bg-green-800 transition text-white rounded-lg text-md font-bold shadow-md active:scale-95"
           >
             {submitLabel}
           </button>
 
-          {defaultValues?.clientId && onDelete && (
+          {/* !! asegura que no se renderice el 0 si la condición es falsa */}
+          {!!defaultValues?.clientId && !!onDelete && (
             <button
               type="button"
               onClick={() => {
@@ -208,9 +198,9 @@ export default function AppointmentForm({
                   onDelete(appointmentId);
                 }
               }}
-              className="bg-red-700 sm:w-[50%] px-4 py-2 cursor-pointer hover:bg-red-800 transition text-white  rounded-lg text-md font-bold shadow-md active:scale-95"
+              className="bg-red-700 flex-1 px-4 py-2 cursor-pointer hover:bg-red-800 transition text-white rounded-lg text-md font-bold shadow-md active:scale-95"
             >
-              Eliminar Turno
+              Eliminar
             </button>
           )}
         </div>

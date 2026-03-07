@@ -8,15 +8,20 @@ type Client = {
   age: number;
   phone?: string;
   paid: boolean;
-}
+};
+
+type ClientsResponse = {
+  data: Client[];
+  total: number;
+};
 
 export function useClients() {
-  return useQuery<Client[]>({
+  return useQuery<ClientsResponse>({
     queryKey: ["clients"],
     queryFn: async () => {
-      const res = await api.get('/clients')
+      const res = await api.get("/clients");
 
-      return res.data.data
-    }
-  })
+      return res.data;
+    },
+  });
 }
