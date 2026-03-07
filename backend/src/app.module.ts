@@ -7,29 +7,28 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true
+      isGlobal: true,
     }),
 
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        type: "postgres",
-        host: configService.get("DATABASE_HOST"),
-        port: configService.get("DATABASE_PORT"),
-        database: configService.get("DATABASE_NAME"),
-        username: configService.get("DATABASE_USER"),
-        password: configService.get("DATABASE_PASS"),
+        type: 'postgres',
+        host: configService.get('DATABASE_HOST'),
+        port: configService.get('DATABASE_PORT'),
+        database: configService.get('DATABASE_NAME'),
+        username: configService.get('DATABASE_USER'),
+        password: configService.get('DATABASE_PASS'),
         autoLoadEntities: true,
         synchronize: true,
-        ssl: true
-      })
+        ssl: true,
+      }),
     }),
 
     ClientsModule,
-    AppointmentsModule
+    AppointmentsModule,
   ],
   controllers: [],
   providers: [],
 })
-
-export class AppModule { }
+export class AppModule {}
