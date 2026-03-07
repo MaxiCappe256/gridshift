@@ -12,7 +12,7 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://gridshift.vercel.app'],
+    origin: ['http://localhost:3000', 'https://aphild.vercel.app'],
   });
 
   await app.listen(process.env.PORT ?? 3001);
