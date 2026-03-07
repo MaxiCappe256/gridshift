@@ -5,8 +5,17 @@ import AppointmentForm from "@/components/AppointmentForm";
 import { useAppointmentsCreate } from "@/hooks/appointments/useAppointmentsCreate";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 export default function NewAppointmentPage() {
+  return (
+    <Suspense fallback={<div>Cargando...</div>}>
+      <Content />
+    </Suspense>
+  );
+}
+
+function Content() {
   const params = useSearchParams();
   const day = params.get("day");
   const hour = params.get("hour");
@@ -14,8 +23,6 @@ export default function NewAppointmentPage() {
   const { mutate: createAppointment, isPending } = useAppointmentsCreate();
 
   return (
-    /* flex-1 asegura que ocupe el espacio restante, y h-[70vh] centra el contenido
-       sin forzar a que la página mida más que el viewport total */
     <div className="flex flex-col items-center justify-center min-h-[80vh] py-4">
       <div className="flex flex-col gap-6 justify-center items-center w-full max-w-md">
         <Link
