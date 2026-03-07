@@ -9,7 +9,7 @@ type ClientFormData = {
   surname: string;
   age: number;
   phone?: string;
-  paid: boolean | string;
+  paid: boolean;
 };
 
 type Props = {
@@ -43,13 +43,10 @@ export default function ClientForm({
 
   const handleInternalSubmit = (data: ClientFormData) => {
     const formattedData = {
-      name: data.name,
-      surname: data.surname,
+      ...data,
       age: Number(data.age),
-      paid: String(data.paid) === "true",
       ...(data.phone?.trim() ? { phone: data.phone } : {}),
     };
-
     onSubmit(formattedData);
   };
 
@@ -58,12 +55,7 @@ export default function ClientForm({
 
   useEffect(() => {
     if (defaultValues) {
-      const dataToReset = {
-        ...defaultValues,
-        paid: String(defaultValues.paid),
-      };
-
-      reset(dataToReset as ClientFormData);
+      reset(defaultValues);
     }
   }, [defaultValues, reset]);
 
@@ -119,9 +111,8 @@ export default function ClientForm({
                 <input
                   type="radio"
                   value="true"
-                  {...register("paid")}
-                  checked={String(paidValue) === "true"}
-                  className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-full checked:border-green-600 transition-all"
+                  {...register("paid", { setValueAs: (v) => v === "true" })}
+                  className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-full checked:border-green-600"
                 />
                 <div className="absolute w-3 h-3 bg-green-600 rounded-full scale-0 peer-checked:scale-100 transition-transform" />
               </div>
@@ -135,9 +126,8 @@ export default function ClientForm({
                 <input
                   type="radio"
                   value="false"
-                  {...register("paid")}
-                  checked={String(paidValue) === "false"}
-                  className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-full checked:border-red-600 transition-all"
+                  {...register("paid", { setValueAs: (v) => v === "true" })}
+                  className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-full checked:border-red-600"
                 />
                 <div className="absolute w-3 h-3 bg-red-600 rounded-full scale-0 peer-checked:scale-100 transition-transform" />
               </div>
