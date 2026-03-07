@@ -16,7 +16,7 @@ export default function EditAppointmentPage() {
   const { mutate: updateAppointment, isPending } = useAppointmentUpdate(id);
   const { mutate: deleteAppointment } = useAppointmentDelete();
 
-  const client = appointment?.clients?.find((c) => c.id === clientId);
+  const client = appointment?.clients?.find((c: any) => c.id === clientId);
 
   if (isLoading || !appointment) {
     return <p>Cargando...</p>;
