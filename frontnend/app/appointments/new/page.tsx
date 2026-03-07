@@ -1,5 +1,6 @@
+"use client";
 export const dynamic = "force-dynamic";
-("use client");
+
 import AppointmentForm from "@/components/AppointmentForm";
 import { useAppointmentsCreate } from "@/hooks/appointments/useAppointmentsCreate";
 import Link from "next/link";
