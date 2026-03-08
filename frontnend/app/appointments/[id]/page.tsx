@@ -1,20 +1,23 @@
 "use client";
+
 import { useAppointment } from "@/hooks/appointments/useAppointment";
 import { useAppointmentUpdate } from "@/hooks/appointments/useAppointmentUpdate";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import AppointmentForm from "@/components/AppointmentForm";
-import { useAppointmentDelete } from "@/hooks/appointments/useAppointmentDelete";
+import { useRemoveClient } from "@/hooks/appointments/useRemoveClient";
 
 export default function EditAppointmentPage() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
+
   const clientId = Number(searchParams.get("clientId"));
   const id = Number(params.id);
 
   const { data: appointment, isLoading } = useAppointment(id);
   const { mutate: updateAppointment, isPending } = useAppointmentUpdate(id);
-  const { mutate: deleteAppointment } = useAppointmentDelete();
+  const { mutate: removeClient } = useRemoveClient();
 
   const client = appointment?.clients?.find((c: any) => c.id === clientId);
 
@@ -31,6 +34,7 @@ export default function EditAppointmentPage() {
         >
           Volver
         </Link>
+
         <h1 className="text-4xl font-bold underline text-center">
           Editar turno
         </h1>
@@ -44,7 +48,18 @@ export default function EditAppointmentPage() {
           onSubmit={({ day, hour }) => {
             updateAppointment({ day, hour });
           }}
-          onDelete={() => deleteAppointment(Number(id))}
+          onDelete={() => {
+            if (!clientId) return;
+
+            if (confirm("¿Eliminar cliente de este turno?")) {
+              removeClient({
+                appointmentId: id,
+                clientId: clientId,
+              });
+
+              router.push("/");
+            }
+          }}
           submitLabel={isPending ? "Editando..." : "Editar"}
           lockDateTime={false}
           clientName={client ? `${client.name} ${client.surname}` : ""}

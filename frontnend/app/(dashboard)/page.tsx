@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import { Fragment } from "react";
 
 export default function HomePage() {
-  const { data = [], isLoading, isError } = useAppointments();
+  const { data, isLoading, isError } = useAppointments();
+  const appointments = data ?? [];
+  console.log(appointments);
   const router = useRouter();
 
   if (isLoading) return <p className="p-6">Cargando turnos...</p>;
@@ -59,7 +61,7 @@ export default function HomePage() {
                 </div>
 
                 {DAYS.map((day) => {
-                  const appointment = data.find(
+                  const cellAppointments = appointments.filter(
                     (a: any) => a.day === day && a.hour === hour,
                   );
 
@@ -68,8 +70,10 @@ export default function HomePage() {
                       key={`${day}-${hour}`}
                       className="border p-2 cursor-pointer hover:bg-gray-100 transition"
                       onClick={() => {
-                        if (appointment) {
-                          router.push(`/appointments/${appointment.id}`);
+                        if (cellAppointments.length > 0) {
+                          router.push(
+                            `/appointments/${cellAppointments[0].id}`,
+                          );
                         } else {
                           router.push(
                             `/appointments/new?day=${day}&hour=${hour}`,
@@ -77,22 +81,24 @@ export default function HomePage() {
                         }
                       }}
                     >
-                      {appointment && (
+                      {cellAppointments.length > 0 && (
                         <div className="space-y-1 max-h-24 overflow-y-auto">
-                          {appointment.clients?.map((client: any) => (
-                            <div
-                              key={client.id}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                router.push(
-                                  `/appointments/${appointment.id}?clientId=${client.id}`,
-                                );
-                              }}
-                              className="bg-green-700 hover:bg-green-800 transition text-white text-xs p-2 rounded text-center"
-                            >
-                              {client.name} {client.surname}
-                            </div>
-                          ))}
+                          {cellAppointments.map((appointment: any) =>
+                            appointment.clients?.map((client: any) => (
+                              <div
+                                key={`${appointment.id}-${client.id}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  router.push(
+                                    `/appointments/${appointment.id}?clientId=${client.id}`,
+                                  );
+                                }}
+                                className="bg-green-700 hover:bg-green-800 transition text-white text-xs p-2 rounded text-center"
+                              >
+                                {client.name} {client.surname}
+                              </div>
+                            )),
+                          )}
                         </div>
                       )}
                     </div>
