@@ -22,7 +22,7 @@ type Props = {
   submitLabel?: string;
   lockDateTime?: boolean;
   clientName?: string;
-  onDelete: (id: number) => void;
+  onDelete: () => void;
 };
 
 export default function AppointmentForm({
@@ -186,12 +186,8 @@ export default function AppointmentForm({
             <button
               type="button"
               onClick={() => {
-                const appointmentId = (defaultValues as any).id;
-                if (
-                  appointmentId &&
-                  confirm("¿Estás seguro de que querés borrar este turno?")
-                ) {
-                  onDelete(appointmentId);
+                if (confirm("¿Estás seguro de que querés borrar este turno?")) {
+                  onDelete();
                 }
               }}
               className="bg-red-700 flex-1 px-4 py-2 cursor-pointer hover:bg-red-800 transition text-white rounded-lg text-md font-bold shadow-md active:scale-95"
