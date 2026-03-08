@@ -42,10 +42,6 @@ export default function AppointmentForm({
     "10:00:00",
     "11:00:00",
     "13:00:00",
-    "14:00:00",
-    "15:00:00",
-    "16:00:00",
-    "17:00:00",
   ] as const;
 
   // Corregimos la extracción de datos: entramos a .data del objeto {data, total}
