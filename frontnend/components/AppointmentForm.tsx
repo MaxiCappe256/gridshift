@@ -185,11 +185,7 @@ export default function AppointmentForm({
           {!!defaultValues?.clientId && !!onDelete && (
             <button
               type="button"
-              onClick={() => {
-                if (confirm("¿Estás seguro de que querés borrar este turno?")) {
-                  onDelete();
-                }
-              }}
+              onClick={() => onDelete()}
               className="bg-red-700 flex-1 px-4 py-2 cursor-pointer hover:bg-red-800 transition text-white rounded-lg text-md font-bold shadow-md active:scale-95"
             >
               Eliminar
