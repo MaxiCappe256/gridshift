@@ -9,13 +9,20 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: async (data: LoginDto) => {
+      console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
       const res = await api.post("/auth/login", data);
       return res.data;
     },
-    onSuccess: (res: LoginResponse) => {
-      toast.success("Bienvenido");
+    onSuccess: (res) => {
+      console.log("LOGIN OK:", res);
+
       localStorage.setItem("token", res.token);
-      router.push("/dashboard");
+      console.log("TOKEN:", localStorage.getItem("token"));
+
+      setTimeout(() => {
+        toast.success("Bienvenido!");
+        router.push("/dashboard");
+      }, 100);
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "Error al ingresar");
