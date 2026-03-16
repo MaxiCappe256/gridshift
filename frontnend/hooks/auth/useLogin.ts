@@ -20,7 +20,7 @@ export const useLogin = () => {
     onSuccess: () => {
       toast.success("Bienvenido!");
       setTimeout(() => {
-        router.replace("/dashboard");
+        router.push("/dashboard");
         router.refresh();
       }, 100);
     },
