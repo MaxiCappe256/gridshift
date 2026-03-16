@@ -10,31 +10,31 @@ export class AuthController {
   @Post('login')
   async login(
     @Body() loginDto: LoginDto,
-    @Res({ passthrough: true }) res: Response,
+    // @Res({ passthrough: true }) res: Response,
   ) {
-    const { token, ...user } = await this.authService.login(loginDto);
+    return this.authService.login(loginDto);
 
-    res.cookie('token', token, {
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
-      maxAge: 1000 * 60 * 60 * 24,
-      path: '/',
-      domain: '.vercel.app', // El punto adelante permite que subdominios lo lean
-    });
+    // res.cookie('token', token, {
+    //   httpOnly: true,
+    //   sameSite: 'none',
+    //   secure: true,
+    //   maxAge: 1000 * 60 * 60 * 24,
+    //   path: '/',
+    //   domain: '.vercel.app', // El punto adelante permite que subdominios lo lean
+    // });
 
-    return {
-      ...user,
-      token,
-    };
+    // return {
+    //   ...user,
+    //   token,
+    // };
   }
 
-  @Post('/logout')
-  logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('token');
+  // @Post('/logout')
+  // logout(@Res({ passthrough: true }) res: Response) {
+  //   res.clearCookie('token');
 
-    return {
-      message: 'Logout successful',
-    };
-  }
+  //   return {
+  //     message: 'Logout successful',
+  //   };
+  // }
 }

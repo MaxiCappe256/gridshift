@@ -1,9 +1,7 @@
-import Navbar from "@/components/Navbar";
 import "./globals.css";
 import { Providers } from "@/providers/Providers";
 import { Metadata } from "next";
 import { Inter, Montserrat, Poppins, Roboto } from "next/font/google";
-import { Toaster } from "sonner";
 
 export const montserrat = Montserrat({
   subsets: ["latin"],

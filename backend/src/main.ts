@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,12 +12,11 @@ async function bootstrap() {
     }),
   );
 
-  app.use(
-    cors({
-      origin: 'https://aphild.vercel.app',
-      credentials: true,
-    }),
-  );
+  app.enableCors({
+    origin: ['http://localhost:3000', 'https://aphild.vercel.app'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // cookies
+  });
 
   app.use(cookieParser());
 

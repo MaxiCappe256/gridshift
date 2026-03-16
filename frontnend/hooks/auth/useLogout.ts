@@ -1,26 +1,23 @@
-"use client";
-
 import { api } from "@/lib/api";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-
 import { toast } from "sonner";
 
 export const useLogout = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async () => {
-      await api.post("/auth/logout");
-    },
-
+    mutationFn: async () => {},
     onSuccess: () => {
+      localStorage.removeItem("token");
       toast.success("Sesión cerrada");
+      queryClient.clear(); // limpia cache
       router.replace("/");
     },
-
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Error al cerrar sesión");
+      console.log(error);
+      toast.error(error.response?.data?.messae || "Error al cerrar sesion");
     },
   });
 };

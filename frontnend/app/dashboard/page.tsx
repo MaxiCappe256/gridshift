@@ -8,7 +8,6 @@ import { Fragment } from "react";
 export default function HomePage() {
   const { data, isLoading, isError } = useAppointments();
   const appointments = data ?? [];
-  console.log(appointments);
   const router = useRouter();
 
   if (isLoading) return <p className="p-6">Cargando turnos...</p>;

@@ -5,12 +5,19 @@ import { LoginDto } from "@/interfaces/auth.interface";
 import { useForm } from "react-hook-form";
 
 export default function LoginForm() {
-  const { register, handleSubmit } = useForm<LoginDto>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<LoginDto>();
 
   const { mutate: loginMutate, isPending } = useLogin();
 
   const onSubmit = (data: LoginDto) => {
-    loginMutate(data);
+    loginMutate(data, {
+      onSuccess: () => reset(),
+    });
   };
 
   return (
@@ -24,13 +31,22 @@ export default function LoginForm() {
         className=" bg-white px-4 py-2 focus:outline-green-600 rounded-md w-full"
         {...register("email", { required: true })}
       />
+      {errors.email && (
+        <span className="text-red-500 text-sm">Email requerido</span>
+      )}
       <input
         type="password"
         placeholder="Password"
         className="bg-white px-4 py-2 focus:outline-green-600 rounded-md w-full"
         {...register("password", { required: true })}
       />{" "}
-      <button className="rounded-md px-4 py-2 bg-green-600 text-white cursor-pointer w-full">
+      {errors.password && (
+        <span className="text-red-500 text-sm">Password requerido</span>
+      )}
+      <button
+        disabled={isPending}
+        className="rounded-md px-4 py-2 bg-green-600 text-white cursor-pointer w-full"
+      >
         {isPending ? "Iniciando..." : "Iniciar session"}
       </button>
     </form>
