@@ -25,6 +25,14 @@ export class ClientsService {
       },
     });
 
+    // const day = new Date().getDay()
+
+    // if(day >= 15) {
+    //   data.forEach(client => {
+    //     client.paid = false;
+    //   })
+    // }
+
     return {
       data,
       total,
