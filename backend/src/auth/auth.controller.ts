@@ -20,6 +20,18 @@ export class AuthController {
       secure: false,
     });
 
-    return user;
+    return {
+      ...user,
+      token,
+    };
+  }
+
+  @Post('/logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('token');
+
+    return {
+      message: 'Logout successful',
+    };
   }
 }

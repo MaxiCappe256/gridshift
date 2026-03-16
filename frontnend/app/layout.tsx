@@ -23,20 +23,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${montserrat.className} bg-gray-50`}>
-        <Navbar />{" "}
         <Providers>
           <div>{children}</div>
         </Providers>
-        <Toaster
-          richColors
-          position="bottom-right"
-          closeButton
-          toastOptions={{
-            style: {
-              borderRadius: "12px",
-            },
-          }}
-        />
       </body>
     </html>
   );

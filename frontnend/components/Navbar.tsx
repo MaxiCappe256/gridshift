@@ -1,10 +1,13 @@
 "use client";
 
+import { useLogout } from "@/hooks/auth/useLogout";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { mutate: logoutMutate, isPending } = useLogout();
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-green-200 z-50 shadow-sm">
@@ -20,14 +23,14 @@ export default function Navbar() {
         {isOpen && (
           <button
             onClick={() => setIsOpen(false)}
-            className="absolute font-bold top-4 left-6 sm:hidden text-2xl text-gray-700"
+            className="cursor-pointer absolute font-bold top-4 left-6 sm:hidden text-2xl text-gray-700"
           >
             X
           </button>
         )}
 
         <Link
-          href="/"
+          href="/dashboard"
           className="font-bold text-2xl text-gray-500 mb-4 sm:mb-0"
         >
           Aphild
@@ -39,7 +42,7 @@ export default function Navbar() {
           } flex-col sm:flex sm:flex-row text-center mb-4 sm:mb-0 gap-8 font-medium`}
         >
           <li className="hover:underline">
-            <Link href="/" onClick={() => setIsOpen(false)}>
+            <Link href="/dashboard" onClick={() => setIsOpen(false)}>
               Turnos
             </Link>
           </li>
@@ -51,9 +54,13 @@ export default function Navbar() {
         </ul>
 
         <div className={`${isOpen ? "block" : "hidden"} sm:block`}>
-          <Link href="" className="text-red-500 underline font-semibold">
-            Cerrar Sesión
-          </Link>
+          {/* > */}
+          <button
+            className="text-red-500 underline font-semibold"
+            onClick={() => logoutMutate()}
+          >
+            {isPending ? "Cerrando sesion" : "Cerrar sesion"}
+          </button>
         </div>
       </div>
     </nav>
