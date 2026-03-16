@@ -1,10 +1,16 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Appointment } from './entities/appointment.entity';
 import { FindManyOptions, Repository } from 'typeorm';
 import { Client } from 'src/clients/entities/client.entity';
+import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
 export class AppointmentsService {
@@ -13,68 +19,65 @@ export class AppointmentsService {
     private readonly appointmentRepository: Repository<Appointment>,
 
     @InjectRepository(Client)
-    private readonly clientRepository: Repository<Client>
-  ) { }
+    private readonly clientRepository: Repository<Client>,
+  ) {}
 
-  async create(createAppointmentDto: CreateAppointmentDto) {
-
+  async create(createAppointmentDto: CreateAppointmentDto, user: User) {
     // desestructuramos para trabajar mejor
-    const { day, hour, clientId } = createAppointmentDto
+    const { day, hour, clientId } = createAppointmentDto;
 
     // buscamos si existe el cliente
-    const client = await this.clientRepository.findOne({ where: { id: clientId } })
+    const client = await this.clientRepository.findOne({
+      where: { id: clientId },
+    });
 
     if (!client) {
-      const errors: string[] = []
-      errors.push("El cliente no existe")
-      throw new NotFoundException(errors)
+      const errors: string[] = [];
+      errors.push('El cliente no existe');
+      throw new NotFoundException(errors);
     }
 
     // buscar si existe turno en ese dia y hora
     let appointment = await this.appointmentRepository.findOne({
       where: { day, hour },
-      relations: ['clients']
-    })
-
-
+      relations: ['clients'],
+    });
 
     if (appointment) {
-
       // buscar si ese turno a esa hora y ese dia ya tiene a ese clientre
-      const alredyIn = appointment.clients?.some((c) => c.id === clientId)
+      const alredyIn = appointment.clients?.some((c) => c.id === clientId);
 
       if (alredyIn) {
-        const errors: string[] = []
-        errors.push("El cliente ya esta anotado en ese turno")
-        throw new BadRequestException(errors)
+        const errors: string[] = [];
+        errors.push('El cliente ya esta anotado en ese turno');
+        throw new BadRequestException(errors);
       }
 
       // agregar cliente al turno existente
-      appointment.clients.push(client)
+      appointment.clients.push(client);
     } else {
       // crear el turno
       appointment = this.appointmentRepository.create({
         day,
         hour,
-        clients: [client]
-      })
+        clients: [client],
+      });
     }
 
-    return this.appointmentRepository.save(appointment)
-
+    return this.appointmentRepository.save(appointment);
   }
 
   async findAll() {
     const [data, total] = await this.appointmentRepository.findAndCount({
       relations: {
-        clients: true
-      }
-    })
+        clients: true,
+      },
+    });
 
     return {
       data,
-      total
-    }
+      total,
+    };
   }
 
   async findOne(id: number) {
@@ -114,9 +117,7 @@ export class AppointmentsService {
       });
 
       if (existingAppointment && existingAppointment.id !== id) {
-        throw new BadRequestException(
-          'Ya existe un turno con ese día y hora',
-        );
+        throw new BadRequestException('Ya existe un turno con ese día y hora');
       }
 
       appointment.day = newDay;
@@ -135,14 +136,10 @@ export class AppointmentsService {
         throw new NotFoundException('El cliente no existe');
       }
 
-      const alreadyIn = appointment.clients.some(
-        (c) => c.id === addClientId,
-      );
+      const alreadyIn = appointment.clients.some((c) => c.id === addClientId);
 
       if (alreadyIn) {
-        throw new BadRequestException(
-          'El cliente ya está en este turno',
-        );
+        throw new BadRequestException('El cliente ya está en este turno');
       }
 
       // lo agrego
@@ -161,21 +158,19 @@ export class AppointmentsService {
     return await this.appointmentRepository.save(appointment);
   }
 
-
   async remove(id: number) {
     const appointment = await this.appointmentRepository.findOne({
       where: { id },
-    })
+    });
 
     if (!appointment) {
-      const errors: string[] = []
-      errors.push("El turno no existe")
-      throw new NotFoundException(errors)
+      const errors: string[] = [];
+      errors.push('El turno no existe');
+      throw new NotFoundException(errors);
     }
 
-    await this.appointmentRepository.remove(appointment)
+    await this.appointmentRepository.remove(appointment);
 
-
-    return "Turno eliminado correctamente"
+    return 'Turno eliminado correctamente';
   }
 }
