@@ -1,28 +1,32 @@
-// import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-// export function middleware(request: NextRequest) {
-//   // 1. Usar nextUrl para obtener el pathname sin errores de tipos
-//   const { pathname } = request.nextUrl;
-//   const token = request.cookies.get("token")?.value;
+export function middleware(request: NextRequest) {
+  // 1. Usamos nextUrl para evitar el error de 'pathname'
+  const { pathname } = request.nextUrl;
 
-//   // RUTAS PROTEGIDAS
-//   const isProtectedRoute =
-//     pathname.startsWith("/dashboard") || pathname.startsWith("/clients");
+  // 2. Intentamos agarrar el valor del token
+  const token = request.cookies.get("token")?.value;
 
-//   // Si no hay token y quiere entrar a una ruta protegida
-//   if (isProtectedRoute && !token) {
-//     return NextResponse.redirect(new URL("/", request.url));
-//   }
+  // DEBUG: Esto lo vas a ver en la terminal de Vercel (Runtime Logs)
+  console.log(`Ruta: ${pathname} | ¿Tiene Token?: ${!!token}`);
 
-//   // Si hay token e intenta ir al login (página raíz)
-//   if (token && pathname === "/") {
-//     return NextResponse.redirect(new URL("/dashboard", request.url));
-//   }
+  const isProtectedRoute =
+    pathname.startsWith("/dashboard") || pathname.startsWith("/clients");
 
-//   return NextResponse.next();
-// }
+  // Si es ruta protegida y NO hay token -> Al login (página raíz)
+  if (isProtectedRoute && !token) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
-// export const config = {
-//   // Evitamos que el middleware corra en archivos estáticos o internos de Next
-//   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-// };
+  // Si ya hay token y está en el login -> Al dashboard
+  if (token && pathname === "/") {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  // Este matcher evita que el middleware corra en archivos de sistema
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};
