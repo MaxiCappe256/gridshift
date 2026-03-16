@@ -1,33 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Obtenemos el token de las cookies
-  const token = request.cookies.get("token")?.value;
+  // 1. Usar nextUrl para obtener el pathname sin errores de tipos
   const { pathname } = request.nextUrl;
+  const token = request.cookies.get("token")?.value;
 
   // RUTAS PROTEGIDAS
   const isProtectedRoute =
     pathname.startsWith("/dashboard") || pathname.startsWith("/clients");
 
-  // Si intenta entrar a una ruta protegida y NO hay token
+  // Si no hay token y quiere entrar a una ruta protegida
   if (isProtectedRoute && !token) {
-    // En lugar de un 307 directo, redirigimos al home
-    const url = request.nextUrl.clone();
-    url.pathname = "/";
-    return NextResponse.redirect(url);
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
-  // Si YA tiene token y está en el login, mandalo al dashboard
+  // Si hay token e intenta ir al login (página raíz)
   if (token && pathname === "/") {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  // El matcher debe incluir las rutas que querés proteger
-  matcher: ["/", "/dashboard/:path*", "/clients/:path*"],
+  // Evitamos que el middleware corra en archivos estáticos o internos de Next
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
