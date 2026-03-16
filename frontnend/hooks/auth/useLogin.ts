@@ -20,8 +20,10 @@ export const useLogin = () => {
     onSuccess: () => {
       toast.success("Bienvenido!");
       setTimeout(() => {
-        window.location.href = "/dashboard";
-      }, 300);
+        // El 'window.location.replace' es la clave para que el middleware
+        // reciba las cookies frescas de Railway
+        window.location.replace("/dashboard");
+      }, 400);
     },
 
     onError: (error: any) => {
