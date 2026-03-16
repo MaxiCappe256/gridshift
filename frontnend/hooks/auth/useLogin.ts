@@ -11,13 +11,18 @@ export const useLogin = () => {
   const router = useRouter();
   return useMutation({
     mutationFn: async (data: LoginDto): Promise<LoginResponse> => {
-      const response = await api.post("/auth/login", data);
+      const response = await api.post("/auth/login", data, {
+        withCredentials: true,
+      });
       return response.data;
     },
 
     onSuccess: () => {
       toast.success("Bienvenido!");
-      router.replace("/dashboard");
+      setTimeout(() => {
+        router.replace("/dashboard");
+        router.refresh();
+      }, 100);
     },
 
     onError: (error: any) => {
