@@ -20,6 +20,7 @@ export class AuthController {
       secure: true,
       maxAge: 1000 * 60 * 60 * 24,
       path: '/',
+      domain: '.vercel.app', // El punto adelante permite que subdominios lo lean
     });
 
     return {
