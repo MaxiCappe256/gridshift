@@ -4,18 +4,18 @@ import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: {
+      origin: ['http://localhost:3000', 'https://aphild.vercel.app'],
+      credentials: true,
+    },
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
     }),
   );
-
-  app.enableCors({
-    origin: ['http://localhost:3000', 'https://aphild.vercel.app'],
-    credentials: true,
-  });
 
   app.use(cookieParser());
 
