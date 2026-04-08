@@ -14,11 +14,7 @@ export const useLogin = () => {
       return res.data;
     },
     onSuccess: (res) => {
-      console.log("LOGIN OK:", res);
-
       localStorage.setItem("token", res.token);
-      console.log("TOKEN:", localStorage.getItem("token"));
-
       setTimeout(() => {
         toast.success("Bienvenido!");
         router.push("/dashboard");
