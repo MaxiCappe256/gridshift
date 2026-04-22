@@ -6,10 +6,11 @@ import { usePaymentMakeAsPaid } from "@/hooks/payments/usePaymentMakeAsPaid";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Suspense } from "react";
 
-export default function DebtsPage() {
-  const router = useRouter();
+function DebtsContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const currentPage = Number(searchParams.get("page")) || 1;
 
@@ -187,5 +188,13 @@ export default function DebtsPage() {
         isLoading={isLoading}
       />
     </div>
+  );
+}
+
+export default function DebtsPage() {
+  return (
+    <Suspense fallback={<div className="p-10 text-center">Cargando...</div>}>
+      <DebtsContent />
+    </Suspense>
   );
 }
