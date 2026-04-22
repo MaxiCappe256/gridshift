@@ -51,6 +51,11 @@ export default function Navbar() {
               Clientes
             </Link>
           </li>
+          <li className="hover:underline">
+            <Link href="/debts" onClick={() => setIsOpen(false)}>
+              Deudas
+            </Link>
+          </li>
         </ul>
 
         <div className={`${isOpen ? "block" : "hidden"} sm:block`}>

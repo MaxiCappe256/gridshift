@@ -13,9 +13,13 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://aphild.vercel.app'],
+    origin: [
+      'http://localhost:3000',
+      'https://aphild.vercel.app',
+      'http://192.168.100.4:3000',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // cookies
+    credentials: true,
   });
 
   app.use(cookieParser());

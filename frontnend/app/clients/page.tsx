@@ -1,5 +1,6 @@
 "use client";
 
+import { DebtStatusBadge } from "@/components/DebtStatusBadge";
 import { useClients } from "@/hooks/clients/useClients";
 import Link from "next/link";
 import { useState } from "react";
@@ -56,11 +57,11 @@ export default function ClientsPage() {
       {!clients?.length ? (
         <p className="text-red-500 mt-5">No hay clientes...</p>
       ) : (
-        <ul className="list-none mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <ul className="list-none mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {clients?.map((client: any) => (
             <li
               key={client.id}
-              className="border p-5 rounded-xl shadow-sm bg-white font-bold text-center flex flex-col justify-center gap-2 hover:shadow-md transition-shadow"
+              className="border p-2 rounded-xl shadow-sm bg-white font-bold text-center flex flex-col justify-center gap-2 hover:shadow-md transition-shadow"
             >
               <Link
                 className="hover:underline hover:scale-105 transition-all"
@@ -69,12 +70,11 @@ export default function ClientsPage() {
                 <strong className="">
                   {client.name}, {client.surname}
                 </strong>
+
+                <div className="flex items-center justify-center">
+                  <DebtStatusBadge count={client.debtCount} />
+                </div>
               </Link>
-              {client.paid ? (
-                <span className="text-green-600 font-semibold">Pagó</span>
-              ) : (
-                <span className="text-red-600 font-semibold">No pagó</span>
-              )}
             </li>
           ))}
         </ul>

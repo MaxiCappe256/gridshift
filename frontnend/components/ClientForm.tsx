@@ -10,7 +10,6 @@ type ClientFormData = {
   surname: string;
   age: number;
   phone?: string;
-  paid: boolean;
 };
 
 type Props = {
@@ -30,17 +29,15 @@ export default function ClientForm({
 }: Props) {
   const {
     register,
-    watch,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<ClientFormData>({
-    defaultValues: defaultValues || { paid: false },
+    defaultValues: defaultValues,
   });
 
   const router = useRouter();
   const queryClient = useQueryClient();
-  const paidValue = watch("paid");
 
   useEffect(() => {
     if (defaultValues) {
@@ -53,7 +50,6 @@ export default function ClientForm({
       ...data,
       age: Number(data.age),
       ...(data.phone?.trim() ? { phone: data.phone } : {}),
-      paid: String(data.paid) === "true",
     };
 
     onSubmit(formattedData);
@@ -112,20 +108,6 @@ export default function ClientForm({
           placeholder="Teléfono (Opcional)..."
           className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-green-500"
         />
-        {/* PAID */}
-        <div className="flex flex-col gap-2">
-          <label className="text-gray-700 font-medium ml-1">
-            Estado de pago
-          </label>
-          <select
-            {...register("paid")}
-            value={String(paidValue)}
-            className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-green-500 bg-white"
-          >
-            <option value="true">Pagó</option>
-            <option value="false">No pagó</option>
-          </select>
-        </div>
 
         {/* BUTTONS */}
         <div className="flex gap-5">

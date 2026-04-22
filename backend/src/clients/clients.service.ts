@@ -19,19 +19,19 @@ export class ClientsService {
   }
 
   async findAll() {
-    const [data, total] = await this.clientRepository.findAndCount({
-      order: {
-        paid: 'DESC',
-      },
-    });
+    // query builder para obtener los clientes y contar sus deudas
+    const queryBuilder = this.clientRepository
+      .createQueryBuilder('client')
+      // busca en la relacion de payment recorre y cuenta los campos con isPaid = false
+      .loadRelationCountAndMap(
+        'client.debtCount',
+        'client.payment',
+        'p',
+        (qb) => qb.andWhere('p.isPaid = :isPaid', { isPaid: false }),
+      )
+      .orderBy('client.name', 'ASC');
 
-    // const day = new Date().getDay()
-
-    // if(day >= 15) {
-    //   data.forEach(client => {
-    //     client.paid = false;
-    //   })
-    // }
+    const [data, total] = await queryBuilder.getManyAndCount();
 
     return {
       data,

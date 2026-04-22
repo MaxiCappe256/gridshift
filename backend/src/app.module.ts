@@ -4,13 +4,16 @@ import { ClientsModule } from './clients/clients.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { PaymentsModule } from './payments/payments.module';
+import { SeedModule } from './seed/seed.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
@@ -22,13 +25,17 @@ import { AuthModule } from './auth/auth.module';
         password: configService.get('DATABASE_PASS'),
         autoLoadEntities: true,
         synchronize: true,
-        ssl: true,
+        ssl: configService.get('DATABASE_HOST')?.includes('localhost')
+          ? false
+          : { rejectUnauthorized: false },
       }),
     }),
 
     ClientsModule,
     AppointmentsModule,
     AuthModule,
+    PaymentsModule,
+    SeedModule,
   ],
   controllers: [],
   providers: [],
