@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from 'src/clients/entities/client.entity';
 import { Payment } from 'src/payments/entities/payment.entity';
+import { User } from 'src/auth/entities/user.entity';
 import { Repository } from 'typeorm';
-import { INITIAL_DATA } from './seed';
+import { INITIAL_DATA, SEED_TEST_USER } from './seed';
 
 @Injectable()
 export class SeedService {
@@ -12,9 +13,22 @@ export class SeedService {
     private readonly clientRepository: Repository<Client>,
     @InjectRepository(Payment)
     private readonly paymentRepository: Repository<Payment>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async runSeed() {
+    await this.userRepository.upsert(
+      {
+        email: SEED_TEST_USER.email,
+        password: SEED_TEST_USER.password,
+        fullName: SEED_TEST_USER.fullName,
+        isActive: true,
+        roles: [...SEED_TEST_USER.roles],
+      },
+      { conflictPaths: ['email'] },
+    );
+
     // limpiar la base de datos
     await this.clientRepository.createQueryBuilder().delete().execute();
     await this.paymentRepository.createQueryBuilder().delete().execute();

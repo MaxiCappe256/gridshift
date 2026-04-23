@@ -9,14 +9,12 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 export class PaymentsCronService {
   private readonly logger = new Logger(PaymentsCronService.name);
 
-  valorMes = 15000;
-
   constructor(
     @InjectRepository(Client)
     private readonly clientRepository: Repository<Client>,
     @InjectRepository(Payment)
     private readonly paymentRepository: Repository<Payment>,
-  ) {}
+  ) { }
 
   // le dice a nestjs que cree el registro cada 1 de cada mes a las 00:00
   @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT)
@@ -37,9 +35,9 @@ export class PaymentsCronService {
     const newDebts = clients.map((client) => {
       const payment = new Payment(); // Instanciamos la clase directamente
       payment.client = client;
+      payment.amount = client.planAmount;
       payment.month = currentMonth;
       payment.year = currentYear;
-      payment.amount = 15000;
       payment.isPaid = false;
       return payment;
     });

@@ -16,7 +16,16 @@ export class PaymentsService {
 
     @InjectRepository(Payment)
     private readonly paymentRepository: Repository<Payment>,
-  ) {}
+  ) { }
+
+  private calculateCurrentAmount(baseAmount: number): number {
+    const day = new Date().getDate();
+
+    if (day <= 15) return baseAmount;
+    if (day <= 21) return Math.round(baseAmount * 1.10)
+
+    return Math.round(baseAmount * 1.15)
+  }
 
   async getDebtDashboard(page: number = 1, limit: number = 10, term: string) {
     const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
@@ -25,6 +34,17 @@ export class PaymentsService {
         ? Math.min(Math.floor(limit), 100)
         : 10;
     const skip = (safePage - 1) * safeLimit;
+
+    const allUnpaidPayments = await this.paymentRepository.find({
+      where: {
+        isPaid: false
+      },
+      relations: ['client']
+    })
+
+    const totalAmountWhitInterest = allUnpaidPayments.reduce((acc, debt) => {
+      return acc + this.calculateCurrentAmount(debt.amount)
+    }, 0)
 
     const queryBuilder = this.paymentRepository
       .createQueryBuilder('payment')
@@ -45,22 +65,21 @@ export class PaymentsService {
       .offset(skip)
       .getManyAndCount();
 
-    const totals = await this.paymentRepository
-      .createQueryBuilder('payment')
-      .select('COALESCE(SUM(payment.amount), 0)', 'totalAmount')
-      .where('payment.isPaid = :isPaid', { isPaid: false })
-      .getRawOne<{ totalAmount: string }>();
 
-    const debtorsCount = await this.paymentRepository
-      .createQueryBuilder('payment')
-      .select('COUNT(DISTINCT payment."clientId")', 'totalDebtors')
-      .where('payment.isPaid = :isPaid', { isPaid: false })
-      .getRawOne<{ totalDebtors: string }>();
+
+    const debtorsWithInterests = debtorsDetail.map(debt => ({
+      ...debt,
+      // Creamos una propiedad nueva para el frontend
+      amountWithInterest: this.calculateCurrentAmount(debt.amount)
+    }));
+
+    const totalDebtors = new Set(allUnpaidPayments.map(p => p.client?.id)).size;
+
 
     return {
-      totalAmount: Number(totals?.totalAmount ?? 0),
-      totalDebtors: Number(debtorsCount?.totalDebtors ?? 0),
-      debtorsDetail,
+      totalAmount: totalAmountWhitInterest,
+      totalDebtors,
+      debtorsDetail: debtorsWithInterests,
       totalPages: Math.max(1, Math.ceil(totalUnpaidPayments / safeLimit)),
       currentPage: safePage,
     };
@@ -78,4 +97,6 @@ export class PaymentsService {
 
     return this.paymentRepository.save(payment);
   }
+
+
 }

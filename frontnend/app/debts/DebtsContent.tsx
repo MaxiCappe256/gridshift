@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { Pagination } from "@/components/Pagination";
-import { useDebtsDashboard } from "@/hooks/debts/useDebtsDashboard";
-import { usePaymentMakeAsPaid } from "@/hooks/payments/usePaymentMakeAsPaid";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Pagination } from '@/components/Pagination';
+import { useDebtsDashboard } from '@/hooks/debts/useDebtsDashboard';
+import { usePaymentMakeAsPaid } from '@/hooks/payments/usePaymentMakeAsPaid';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export function DebtsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const currentPage = Number(searchParams.get("page")) || 1;
+  const currentPage = Number(searchParams.get('page')) || 1;
 
   const [isOpen, setIsOpen] = useState(false);
   const [paymentDebt, setPaymentDebt] = useState<any>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedTerm, setDebouncedTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedTerm, setDebouncedTerm] = useState('');
 
   // timmer para no mandar cada consulta cuando el cliente escribe una letra . 1 letra 1 consulta . !!! !== !!!
   useEffect(() => {
@@ -66,14 +66,14 @@ export function DebtsContent() {
       <div className="flex flex-col md:flex-row text-center md:text-left items-center gap-4 md:gap-20">
         <div className="bg-red-300 p-5 rounded-md w-full md:w-auto">
           <p>
-            Total Deudores:{" "}
+            Total Deudores:{' '}
             <span className="font-bold">{dashboard.totalDebtors}</span>
           </p>
         </div>
 
         <div className="bg-green-300 p-5 rounded-md w-full md:w-auto">
           <p>
-            Total deuda:{" "}
+            Total deuda:{' '}
             <span className="font-bold">${dashboard.totalAmount}</span>
           </p>
         </div>
@@ -117,7 +117,9 @@ export function DebtsContent() {
                   <td className="p-2">
                     {payment.month}/{payment.year}
                   </td>
-                  <td className="p-2 text-red-500">${payment.amount}</td>
+                  <td className="p-2 text-red-500">
+                    ${payment.amountWithInterest}
+                  </td>
 
                   <td className="p-2 text-right">
                     <button
@@ -137,19 +139,20 @@ export function DebtsContent() {
 
       <div
         className={`${
-          isOpen ? "flex" : "hidden"
+          isOpen ? 'flex' : 'hidden'
         } fixed inset-0 bg-black/40 items-center justify-center`}
       >
         <div className="bg-white p-10 text-xl rounded-md flex items-center justify-center flex-col">
           <p>
-            Deseas cobrarle a{" "}
+            Deseas cobrarle a{' '}
             <span className="font-bold">{paymentDebt?.client.name}</span>?
           </p>
           <p className="mt-2">
             Mes: <span className="font-bold">{paymentDebt?.month}</span>
           </p>
           <p className="mt-2">
-            Monto: $<span className="font-bold">{paymentDebt?.amount}</span>
+            Monto: $
+            <span className="font-bold">{paymentDebt?.amountWithInterest}</span>
           </p>
 
           <div className="flex mt-5  gap-5">
@@ -173,7 +176,7 @@ export function DebtsContent() {
               }}
               className="bg-green-600 hover:bg-green-800 transition-all cursor-pointer px-4 py-2 rounded-md text-white"
             >
-              {isPending ? "Cobrando..." : "Cobrar"}
+              {isPending ? 'Cobrando...' : 'Cobrar'}
             </button>
           </div>
         </div>

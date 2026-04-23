@@ -6,8 +6,6 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
-console.log(bcrypt.hashSync('Merli6435', 10));
-
 @Injectable()
 export class AuthService {
   constructor(

@@ -1,15 +1,16 @@
-"use client";
+'use client';
 
-import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 
 type ClientFormData = {
   name: string;
   surname: string;
   age: number;
   phone?: string;
+  planAmount: number;
 };
 
 type Props = {
@@ -23,7 +24,7 @@ type Props = {
 export default function ClientForm({
   defaultValues,
   onSubmit,
-  submitLabel = "Guardar",
+  submitLabel = 'Guardar',
   onDelete,
   clientId,
 }: Props) {
@@ -58,7 +59,7 @@ export default function ClientForm({
   return (
     <div className="flex flex-col items-center">
       <h1 className="text-3xl font-bold text-center mb-4">
-        {clientId ? "Editar cliente" : "Crear cliente"}
+        {clientId ? 'Editar cliente' : 'Crear cliente'}
       </h1>
 
       <form
@@ -67,7 +68,7 @@ export default function ClientForm({
       >
         {/* NAME */}
         <input
-          {...register("name", { required: "Nombre obligatorio" })}
+          {...register('name', { required: 'Nombre obligatorio' })}
           type="text"
           placeholder="Nombre..."
           className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-green-500"
@@ -78,7 +79,7 @@ export default function ClientForm({
 
         {/* SURNAME */}
         <input
-          {...register("surname", { required: "Apellido obligatorio" })}
+          {...register('surname', { required: 'Apellido obligatorio' })}
           type="text"
           placeholder="Apellido..."
           className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-green-500"
@@ -91,8 +92,8 @@ export default function ClientForm({
         <input
           type="number"
           placeholder="Edad..."
-          {...register("age", {
-            required: "Edad obligatoria",
+          {...register('age', {
+            required: 'Edad obligatoria',
             valueAsNumber: true,
           })}
           className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-green-500"
@@ -103,11 +104,23 @@ export default function ClientForm({
 
         {/* PHONE */}
         <input
-          {...register("phone")}
+          {...register('phone')}
           type="tel"
           placeholder="Teléfono (Opcional)..."
           className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-green-500"
         />
+
+        {/* PLAN */}
+        <div className="flex flex-col gap-2">
+          <label className="font-bold">Plan del Cliente:</label>
+          <select
+            {...register('planAmount', { required: true, valueAsNumber: true })}
+            className="px-4 py-2 rounded-md border border-gray-400 focus:outline-green-600 bg-white"
+          >
+            <option value={25000}>Plan Básico ($25.000)</option>
+            <option value={50000}>Plan Pro ($50.000)</option>
+          </select>
+        </div>
 
         {/* BUTTONS */}
         <div className="flex gap-5">
@@ -123,11 +136,11 @@ export default function ClientForm({
               type="button"
               onClick={() => {
                 if (
-                  confirm("¿Estas seguro que deseas eliminar este cliente?")
+                  confirm('¿Estas seguro que deseas eliminar este cliente?')
                 ) {
                   onDelete(clientId);
-                  queryClient.invalidateQueries({ queryKey: ["clients"] });
-                  router.push("/clients");
+                  queryClient.invalidateQueries({ queryKey: ['clients'] });
+                  router.push('/clients');
                 }
               }}
               className="bg-red-700 w-full hover:scale-105 hover:bg-red-800 transition text-white py-2 rounded-lg"
