@@ -1,5 +1,6 @@
 "use client";
 
+import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -17,5 +18,10 @@ export default function AppointmentsLayout({
       router.replace("/");
     }
   }, [router]);
-  return <div className="max-w-6xl mx-auto  px-6 py-8 pt-24">{children}</div>;
+  return (
+    <>
+      <Navbar />
+      <main className="container-page page-top page-pad">{children}</main>
+    </>
+  );
 }

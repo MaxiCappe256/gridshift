@@ -16,7 +16,7 @@ export function useAppointmentUpdate(id: number) {
       toast.success("Turno actualizado correctamente");
       queryClient.invalidateQueries({ queryKey: ["appointment", id] });
       queryClient.invalidateQueries({ queryKey: ["appointments"] });
-      router.push("/");
+      router.push("/dashboard");
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "Error al actualizar");

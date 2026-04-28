@@ -62,106 +62,146 @@ export function DebtsContent() {
     );
 
   return (
-    <div className="mt-5">
-      <div className="flex flex-col md:flex-row text-center md:text-left items-center gap-4 md:gap-20">
-        <div className="bg-red-300 p-5 rounded-md w-full md:w-auto">
-          <p>
-            Total Deudores:{' '}
-            <span className="font-bold">{dashboard.totalDebtors}</span>
-          </p>
+    <div className="space-y-6">
+      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="h1">Deudas</h1>
+          <p className="subtle">Control de morosidad y cobros pendientes.</p>
         </div>
 
-        <div className="bg-green-300 p-5 rounded-md w-full md:w-auto">
-          <p>
-            Total deuda:{' '}
-            <span className="font-bold">${dashboard.totalAmount}</span>
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-10">
-        <div className="flex justify-between items-center mb-5">
-          <h3>Lista de deudores:</h3>
-
+        <div className="w-full lg:w-auto">
           <input
             type="text"
             placeholder="Buscar cliente..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-4 py-2 rounded-md border border-gray-400 focus:outline-green-600"
+            className="input lg:w-[360px]"
           />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="kpi">
+          <div>
+            <p className="text-sm font-semibold text-slate-700">Total deudores</p>
+            <p className="subtle">Clientes con pagos vencidos</p>
+          </div>
+          <strong className="text-red-600">{dashboard.totalDebtors}</strong>
+        </div>
+
+        <div className="kpi">
+          <div>
+            <p className="text-sm font-semibold text-slate-700">Total deuda</p>
+            <p className="subtle">Monto acumulado con interés</p>
+          </div>
+          <strong className="text-slate-900">${dashboard.totalAmount}</strong>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="h2">Lista de deudores</h2>
+          <span className="chip">
+            Página <span className="font-extrabold text-slate-900">{currentPage}</span> /{" "}
+            {dashboard.totalPages}
+          </span>
         </div>
 
         {dashboard.debtorsDetail.length === 0 ? (
-          <p className="mt-10 text-center text-gray-500 text-2xl">
-            No hay deudas pendientes
-          </p>
+          <div className="card card-pad text-center">
+            <p className="text-slate-700 font-semibold text-lg">No hay deudas pendientes</p>
+            <p className="subtle mt-1">Buen trabajo: el gimnasio está al día.</p>
+          </div>
         ) : (
-          <table className="w-full text-left bg-white">
-            <thead className="bg-gray-100 border-b border-gray-300">
-              <tr>
-                <th className="p-2">Nombre</th>
-                <th className="p-2">Mes</th>
-                <th className="p-2">Monto</th>
-                <th className="p-2 text-right">Accion</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {dashboard.debtorsDetail.map((payment: any) => (
-                <tr
-                  key={payment.id}
-                  className="border-b border-gray-300 hover:bg-gray-100"
-                >
-                  <td className="p-2">{payment.client.name}</td>
-                  <td className="p-2">
-                    {payment.month}/{payment.year}
-                  </td>
-                  <td className="p-2 text-red-500">
-                    ${payment.amountWithInterest}
-                  </td>
-
-                  <td className="p-2 text-right">
-                    <button
-                      disabled={isPending}
-                      onClick={() => handleClickCargue(payment)}
-                      className="cursor-pointer bg-red-600 hover:bg-red-800 transition-all px-3 py-1 rounded-md text-white"
-                    >
-                      Cobrar
-                    </button>
-                  </td>
+          <div className="table-wrap">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Periodo</th>
+                  <th>Monto</th>
+                  <th className="text-right">Acción</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {dashboard.debtorsDetail.map((payment: any) => (
+                  <tr key={payment.id}>
+                    <td className="font-semibold text-slate-900">
+                      {payment.client.name}
+                    </td>
+                    <td className="text-slate-600">
+                      <span className="chip bg-slate-50">
+                        {payment.month}/{payment.year}
+                      </span>
+                    </td>
+                    <td>
+                      <span className="inline-flex items-center rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm font-semibold text-red-700">
+                        ${payment.amountWithInterest}
+                      </span>
+                    </td>
+
+                    <td className="text-right">
+                      <button
+                        disabled={isPending}
+                        onClick={() => handleClickCargue(payment)}
+                        className="btn btn-danger"
+                      >
+                        Cobrar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 
       <div
         className={`${
           isOpen ? 'flex' : 'hidden'
-        } fixed inset-0 bg-black/40 items-center justify-center`}
+        } fixed inset-0 bg-slate-950/50 items-center justify-center p-4`}
       >
-        <div className="bg-white p-10 text-xl rounded-md flex items-center justify-center flex-col">
-          <p>
-            Deseas cobrarle a{' '}
-            <span className="font-bold">{paymentDebt?.client.name}</span>?
-          </p>
-          <p className="mt-2">
-            Mes: <span className="font-bold">{paymentDebt?.month}</span>
-          </p>
-          <p className="mt-2">
-            Monto: $
-            <span className="font-bold">{paymentDebt?.amountWithInterest}</span>
-          </p>
+        <div className="w-full max-w-md card card-pad">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="h2">Confirmar cobro</p>
+              <p className="subtle mt-1">
+                Se marcará el pago como abonado.
+              </p>
+            </div>
 
-          <div className="flex mt-5  gap-5">
             <button
-              onClick={() => {
-                setIsOpen(false);
-              }}
-              className="bg-red-600 hover:bg-red-800 transition-all cursor-pointer px-4 py-2 rounded-md text-white"
+              onClick={() => setIsOpen(false)}
+              className="rounded-xl border border-slate-200 bg-white/70 px-3 py-2 text-slate-700 hover:bg-white transition"
+              aria-label="Cerrar"
             >
+              ×
+            </button>
+          </div>
+
+          <div className="mt-5 space-y-2 text-sm">
+            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50/60 px-4 py-3">
+              <span className="text-slate-600">Cliente</span>
+              <span className="font-semibold text-slate-900">
+                {paymentDebt?.client.name}
+              </span>
+            </div>
+            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50/60 px-4 py-3">
+              <span className="text-slate-600">Mes</span>
+              <span className="font-semibold text-slate-900">{paymentDebt?.month}</span>
+            </div>
+            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50/60 px-4 py-3">
+              <span className="text-slate-600">Monto</span>
+              <span className="font-semibold text-slate-900">
+                ${paymentDebt?.amountWithInterest}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row mt-6 gap-3">
+            <button onClick={() => setIsOpen(false)} className="btn btn-ghost w-full">
               Cancelar
             </button>
             <button
@@ -174,7 +214,8 @@ export function DebtsContent() {
                   });
                 }
               }}
-              className="bg-green-600 hover:bg-green-800 transition-all cursor-pointer px-4 py-2 rounded-md text-white"
+              className="btn btn-primary w-full"
+              disabled={isPending}
             >
               {isPending ? 'Cobrando...' : 'Cobrar'}
             </button>

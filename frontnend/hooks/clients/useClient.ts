@@ -7,8 +7,9 @@ type Client = {
   surname: string;
   age: number;
   phone?: string;
+  planAmount: number;
   paid: boolean;
-}
+};
 
 export function useClient(id: string) {
   return useQuery<Client>({

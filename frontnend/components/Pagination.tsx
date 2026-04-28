@@ -22,7 +22,7 @@ export const Pagination = ({
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className=" cursor-pointer px-3 font-bold py-1 bg-gray-100 rounded disabled:opacity-50"
+        className="btn btn-ghost px-3 py-2"
       >
         &lt;
       </button>
@@ -32,11 +32,9 @@ export const Pagination = ({
         <button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`px-4 py-2 rounded-md transition-colors ${
-            currentPage === page
-              ? "bg-green-500 text-white font-bold" // Estilo página activa
-              : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-          } cursor-pointer`}
+          className={`btn px-4 py-2.5 ${
+            currentPage === page ? 'btn-primary' : 'btn-ghost'
+          }`}
         >
           {page}
         </button>
@@ -46,7 +44,7 @@ export const Pagination = ({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="cursor-pointer px-3 py-1 font-bold bg-gray-100 rounded disabled:opacity-50"
+        className="btn btn-ghost px-3 py-2"
       >
         &gt;
       </button>

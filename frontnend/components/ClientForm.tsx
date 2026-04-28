@@ -58,20 +58,20 @@ export default function ClientForm({
 
   return (
     <div className="flex flex-col items-center">
-      <h1 className="text-3xl font-bold text-center mb-4">
+      <h1 className="h1 text-center mb-6">
         {clientId ? 'Editar cliente' : 'Crear cliente'}
       </h1>
 
       <form
         onSubmit={handleSubmit(handleInternalSubmit)}
-        className="flex flex-col border rounded-md shadow-lg gap-6 w-full max-w-md md:w-[40vw] lg:w-[25vw] p-4 bg-white"
+        className="card card-pad w-full max-w-md md:w-[40vw] lg:w-[26vw] space-y-4"
       >
         {/* NAME */}
         <input
           {...register('name', { required: 'Nombre obligatorio' })}
           type="text"
           placeholder="Nombre..."
-          className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-green-500"
+          className="input"
         />
         {errors.name && (
           <p className="text-red-500 text-sm">{errors.name.message}</p>
@@ -82,7 +82,7 @@ export default function ClientForm({
           {...register('surname', { required: 'Apellido obligatorio' })}
           type="text"
           placeholder="Apellido..."
-          className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-green-500"
+          className="input"
         />
         {errors.surname && (
           <p className="text-red-500 text-sm">{errors.surname.message}</p>
@@ -96,7 +96,7 @@ export default function ClientForm({
             required: 'Edad obligatoria',
             valueAsNumber: true,
           })}
-          className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-green-500"
+          className="input"
         />
         {errors.age && (
           <p className="text-red-500 text-sm">{errors.age.message}</p>
@@ -107,15 +107,15 @@ export default function ClientForm({
           {...register('phone')}
           type="tel"
           placeholder="Teléfono (Opcional)..."
-          className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-green-500"
+          className="input"
         />
 
         {/* PLAN */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold">Plan del Cliente:</label>
+          <label className="text-sm font-semibold text-slate-700">Plan del cliente</label>
           <select
             {...register('planAmount', { required: true, valueAsNumber: true })}
-            className="px-4 py-2 rounded-md border border-gray-400 focus:outline-green-600 bg-white"
+            className="select"
           >
             <option value={25000}>Plan Básico ($25.000)</option>
             <option value={50000}>Plan Pro ($50.000)</option>
@@ -123,10 +123,10 @@ export default function ClientForm({
         </div>
 
         {/* BUTTONS */}
-        <div className="flex gap-5">
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <button
             type="submit"
-            className="bg-green-700 w-full hover:scale-105 hover:bg-green-800 transition text-white py-2 rounded-lg"
+            className="btn btn-primary w-full"
           >
             {submitLabel}
           </button>
@@ -143,7 +143,7 @@ export default function ClientForm({
                   router.push('/clients');
                 }
               }}
-              className="bg-red-700 w-full hover:scale-105 hover:bg-red-800 transition text-white py-2 rounded-lg"
+              className="btn btn-danger w-full"
             >
               Eliminar
             </button>

@@ -15,7 +15,7 @@ export function useAppointmentDelete() {
     onSuccess: () => {
       toast.success("Turno eliminado correctamente");
       queryClient.invalidateQueries({ queryKey: ["appointments"] });
-      router.push("/");
+      router.push("/dashboard");
     },
     onError: (error: any) => {
       toast.error(

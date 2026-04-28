@@ -22,7 +22,7 @@ export function useAppointmentsCreate() {
     onSuccess: () => {
       toast.success("Turno creado correctamente");
       queryClient.invalidateQueries({ queryKey: ["appointments"] });
-      router.push("/");
+      router.push("/dashboard");
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message);

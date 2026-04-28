@@ -75,21 +75,24 @@ export default function AppointmentForm({
     <div className="flex flex-col gap-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col border rounded-md shadow-lg gap-4 sm:gap-6 w-[80vw] sm:w-[30vw] p-4 bg-white"
+        className="card card-pad w-[92vw] sm:w-[520px] space-y-4"
       >
         <div className="relative flex flex-col gap-2">
-          <label className="font-bold text-base text-gray-700">Cliente</label>
+          <label className="text-sm font-semibold text-slate-700">Cliente</label>
 
           {defaultValues?.clientId ? (
-            <div className="p-3 border-2 rounded-md font-bold text-xl bg-gray-100 text-green-700 border-green-700">
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 font-semibold text-slate-900">
               {clientName || "Cargando..."}
-              <input type="hidden" {...register("clientId")} />
+              <input
+                type="hidden"
+                {...register("clientId", { valueAsNumber: true })}
+              />
             </div>
           ) : (
             <>
               <input
                 type="text"
-                className="p-3 border rounded-md text-base outline-none focus:ring-2 focus:ring-green-500"
+                className="input"
                 placeholder="Buscar cliente..."
                 value={search}
                 onChange={(e) => {
@@ -98,45 +101,54 @@ export default function AppointmentForm({
                 }}
               />
               {isOpen && (
-                <ul className="absolute top-full left-0 right-0 bg-white border rounded-md shadow-xl max-h-40 overflow-y-auto z-50">
+                <ul className="absolute top-full left-0 right-0 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white/95 backdrop-blur shadow-(--shadow-lg) max-h-56 overflow-y-auto z-50">
                   {filteredClients.map((client) => (
                     <li
                       key={client.id}
                       onClick={() => {
                         setSearch(`${client.name} ${client.surname}`);
-                        setValue("clientId", client.id);
+                        setValue("clientId", client.id, {
+                          shouldDirty: true,
+                          shouldTouch: true,
+                          shouldValidate: true,
+                        });
                         setIsOpen(false);
                       }}
-                      className="p-2 hover:bg-green-100 cursor-pointer text-sm border-b last:border-none"
+                      className="px-4 py-3 hover:bg-emerald-50 cursor-pointer text-sm border-b border-slate-200/70 last:border-none"
                     >
-                      {client.name} {client.surname}
+                      <span className="font-semibold text-slate-900">
+                        {client.name} {client.surname}
+                      </span>
                     </li>
                   ))}
                   {filteredClients.length === 0 && (
-                    <li className="p-2 text-gray-400 text-sm">
+                    <li className="px-4 py-3 text-slate-400 text-sm">
                       No se encontraron clientes
                     </li>
                   )}
                 </ul>
               )}
-              <input type="hidden" {...register("clientId")} />
+              <input
+                type="hidden"
+                {...register("clientId", { valueAsNumber: true })}
+              />
             </>
           )}
         </div>
 
         {/* DÍA */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-base text-gray-700">Día</label>
+          <label className="text-sm font-semibold text-slate-700">Día</label>
           {lockDateTime ? (
             <input
               disabled
-              className="p-3 border rounded-md bg-gray-100 text-gray-500"
+              className="input bg-slate-50 text-slate-500"
               {...register("day")}
             />
           ) : (
             <select
               {...register("day")}
-              className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-blue-500"
+              className="select"
             >
               <option value="">Seleccionar día</option>
               {DAYS.map((day) => (
@@ -150,17 +162,17 @@ export default function AppointmentForm({
 
         {/* HORA */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-base text-gray-700">Hora</label>
+          <label className="text-sm font-semibold text-slate-700">Hora</label>
           {lockDateTime ? (
             <input
               disabled
-              className="p-3 border rounded-md bg-gray-100 text-gray-500"
+              className="input bg-slate-50 text-slate-500"
               {...register("hour")}
             />
           ) : (
             <select
               {...register("hour")}
-              className="p-3 border rounded-md outline-none focus:ring-2 focus:ring-blue-500"
+              className="select"
             >
               <option value="">Seleccionar hora</option>
               {HOURS.map((hour) => (
@@ -173,10 +185,10 @@ export default function AppointmentForm({
         </div>
 
         {/* BOTONES ADAPTABLES */}
-        <div className="flex gap-4 w-full">
+        <div className="flex flex-col sm:flex-row gap-3 w-full pt-2">
           <button
             type="submit"
-            className="bg-green-700 flex-1 px-4 py-2 cursor-pointer hover:bg-green-800 transition text-white rounded-lg text-md font-bold shadow-md active:scale-95"
+            className="btn btn-primary w-full"
           >
             {submitLabel}
           </button>
@@ -186,7 +198,7 @@ export default function AppointmentForm({
             <button
               type="button"
               onClick={() => onDelete()}
-              className="bg-red-700 flex-1 px-4 py-2 cursor-pointer hover:bg-red-800 transition text-white rounded-lg text-md font-bold shadow-md active:scale-95"
+              className="btn btn-danger w-full"
             >
               Eliminar
             </button>

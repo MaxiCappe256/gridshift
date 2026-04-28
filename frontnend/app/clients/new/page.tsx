@@ -7,15 +7,17 @@ export default function NewClientPage() {
   const { mutate: createClient, isPending } = useClientCreate();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] py-4">
-      <div className="flex flex-col gap-4 items-center">
-        {" "}
-        <Link
-          href="/clients"
-          className="self-start mx-auto text-xl underline text-gray-500 hover:text-black transition"
-        >
-          Volver
-        </Link>
+    <div className="space-y-6">
+      <Link href="/clients" className="btn btn-ghost w-fit">
+        ← Volver
+      </Link>
+
+      <div className="text-center space-y-1">
+        <h1 className="h1">Nuevo cliente</h1>
+        <p className="subtle">Completá los datos para empezar a agendar.</p>
+      </div>
+
+      <div className="flex justify-center">
         <ClientForm
           onSubmit={(data) => {
             createClient(data);
