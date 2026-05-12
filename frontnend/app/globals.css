@@ -1,1 +1,159 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Aphild — “athletic editorial SaaS” */
+    --bg: 248 250 252; /* slate-50-ish */
+    --surface: 255 255 255;
+    --surface-2: 246 248 252;
+    --text: 15 23 42; /* slate-900 */
+    --muted: 100 116 139; /* slate-500 */
+    --border: 226 232 240; /* slate-200 */
+
+    --primary: 16 185 129; /* emerald-500 */
+    --primary-2: 5 150 105; /* emerald-600 */
+    --danger: 239 68 68; /* red-500 */
+    --warning: 245 158 11; /* amber-500 */
+
+    --shadow: 0 1px 0 rgba(15, 23, 42, 0.04), 0 8px 30px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 1px 0 rgba(15, 23, 42, 0.05), 0 18px 60px rgba(15, 23, 42, 0.14);
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    @apply antialiased;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: radial-gradient(1200px 700px at 10% -10%, rgba(16, 185, 129, 0.14), transparent 50%),
+      radial-gradient(900px 520px at 95% 0%, rgba(15, 23, 42, 0.08), transparent 46%),
+      radial-gradient(700px 520px at 60% 110%, rgba(245, 158, 11, 0.08), transparent 45%),
+      rgb(var(--bg));
+    color: rgb(var(--text));
+  }
+
+  ::selection {
+    background: rgba(16, 185, 129, 0.25);
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: var(--font-display), var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+      sans-serif;
+  }
+
+  .app-shell {
+    @apply min-h-dvh;
+  }
+
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .page-pad {
+    @apply py-8 sm:py-10;
+  }
+
+  .page-top {
+    @apply pt-24 sm:pt-28;
+  }
+
+  .h1 {
+    font-family: var(--font-display), var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+      sans-serif;
+    @apply text-3xl sm:text-4xl font-extrabold tracking-tight;
+  }
+
+  .h2 {
+    font-family: var(--font-display), var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+      sans-serif;
+    @apply text-xl sm:text-2xl font-bold tracking-tight;
+  }
+
+  .subtle {
+    @apply text-sm text-slate-500;
+  }
+
+  .card {
+    @apply rounded-2xl bg-white/80 backdrop-blur border border-slate-200 shadow-[var(--shadow)];
+  }
+
+  .card-hover {
+    @apply transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-lg)];
+  }
+
+  .card-pad {
+    @apply p-4 sm:p-6;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-slate-200 bg-white/90 px-3.5 py-2.5 text-sm shadow-sm outline-none transition;
+    @apply placeholder:text-slate-400 focus:border-emerald-300 focus:ring-4 focus:ring-emerald-200/50;
+  }
+
+  .select {
+    @apply w-full rounded-xl border border-slate-200 bg-white/90 px-3.5 py-2.5 text-sm shadow-sm outline-none transition;
+    @apply focus:border-emerald-300 focus:ring-4 focus:ring-emerald-200/50;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition;
+    @apply focus:outline-none focus:ring-4 focus:ring-emerald-200/60 active:translate-y-px disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply text-white;
+    background: linear-gradient(180deg, rgba(16, 185, 129, 1), rgba(5, 150, 105, 1));
+  }
+
+  .btn-primary:hover {
+    filter: brightness(0.98);
+  }
+
+  .btn-ghost {
+    @apply border border-slate-200 bg-white/70 text-slate-700 hover:bg-white;
+  }
+
+  .btn-danger {
+    @apply text-white;
+    background: linear-gradient(180deg, rgba(239, 68, 68, 1), rgba(220, 38, 38, 1));
+  }
+
+  .table-wrap {
+    @apply overflow-hidden rounded-2xl border border-slate-200 bg-white/80 backdrop-blur shadow-[var(--shadow)];
+  }
+
+  .table {
+    @apply w-full text-left text-sm;
+  }
+
+  .table thead {
+    @apply bg-slate-50/80 text-slate-700;
+  }
+
+  .table th {
+    @apply px-4 py-3 font-semibold tracking-tight;
+  }
+
+  .table td {
+    @apply px-4 py-3 align-middle;
+  }
+
+  .table tbody tr {
+    @apply border-t border-slate-200/80 hover:bg-slate-50/70 transition-colors;
+  }
+
+  .kpi {
+    @apply flex items-center justify-between gap-6 rounded-2xl border border-slate-200 bg-white/80 backdrop-blur px-5 py-4 shadow-[var(--shadow)];
+  }
+
+  .kpi strong {
+    @apply text-2xl font-extrabold tracking-tight;
+  }
+}

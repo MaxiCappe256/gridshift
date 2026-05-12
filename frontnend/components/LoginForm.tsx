@@ -22,32 +22,39 @@ export default function LoginForm() {
 
   return (
     <form
-      className="flex p-4 justify-center items-center w-full max-w-sm flex-col gap-4 "
+      className="flex justify-center items-stretch w-full flex-col gap-3"
       onSubmit={handleSubmit(onSubmit)}
     >
+      <div className="space-y-1">
+        <label className="text-sm font-semibold text-slate-700">Email</label>
       <input
         type="email"
         placeholder="Email"
-        className=" bg-white px-4 py-2 focus:outline-green-600 rounded-md w-full"
+        className="input"
         {...register("email", { required: true })}
       />
       {errors.email && (
         <span className="text-red-500 text-sm">Email requerido</span>
       )}
+      </div>
+
+      <div className="space-y-1">
+        <label className="text-sm font-semibold text-slate-700">Contraseña</label>
       <input
         type="password"
         placeholder="Password"
-        className="bg-white px-4 py-2 focus:outline-green-600 rounded-md w-full"
+        className="input"
         {...register("password", { required: true })}
       />{" "}
       {errors.password && (
         <span className="text-red-500 text-sm">Password requerido</span>
       )}
+      </div>
       <button
         disabled={isPending}
-        className="rounded-md px-4 py-2 bg-green-600 text-white cursor-pointer w-full"
+        className="btn btn-primary w-full mt-1"
       >
-        {isPending ? "Iniciando..." : "Iniciar session"}
+        {isPending ? "Iniciando..." : "Iniciar sesión"}
       </button>
     </form>
   );

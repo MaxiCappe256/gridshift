@@ -8,6 +8,7 @@ type Client = {
   surname: string;
   age: number;
   paid: boolean;
+  planAmount: number
 };
 
 type UpdatedClientArgs = {

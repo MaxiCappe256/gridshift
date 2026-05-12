@@ -21,7 +21,7 @@ export default function AppointmentsLayout({
   return (
     <>
       <Navbar />
-      <div className="max-w-6xl mx-auto px-6 py-8 pt-24">{children}</div>
+      <main className="container-page page-top page-pad">{children}</main>
     </>
   );
 }

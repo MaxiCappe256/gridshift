@@ -30,4 +30,9 @@ export class CreateClientDto {
   @IsOptional()
   @IsBoolean({ message: 'El pago debe ser verdadero o falso' })
   paid?: boolean;
+
+  @IsNotEmpty({ message: 'El plan es obligatorio' })
+  @IsNumber({}, { message: 'El plan debe ser un número' })
+  @IsInt()
+  planAmount: number;
 }

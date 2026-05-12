@@ -1,5 +1,13 @@
 import { Appointment } from 'src/appointments/entities/appointment.entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Payment } from 'src/payments/entities/payment.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('clients')
 export class Client {
@@ -18,9 +26,17 @@ export class Client {
   @Column({ type: 'varchar', length: 20, nullable: true })
   phone?: string;
 
-  @Column({ type: 'boolean', default: false })
-  paid: boolean;
+  debtCount?: number;
+
+  @Column({ type: 'int', default: 30000 })
+  planAmount: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @ManyToMany(() => Appointment, (appointment) => appointment.clients)
   appointments: Appointment[];
+
+  @OneToMany(() => Payment, (payment) => payment.client)
+  payment: Payment[];
 }

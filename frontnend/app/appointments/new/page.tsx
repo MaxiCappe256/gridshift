@@ -23,18 +23,19 @@ function Content() {
   const { mutate: createAppointment, isPending } = useAppointmentsCreate();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] py-4">
-      <div className="flex flex-col gap-6 justify-center items-center w-full max-w-md">
-        <Link
-          href="/"
-          className="text-xl underline text-gray-500 hover:text-black transition"
-        >
-          Volver
-        </Link>
-        <h1 className="text-4xl font-bold underline text-center">
-          Crear turno
-        </h1>
+    <div className="space-y-6">
+      <Link href="/dashboard" className="btn btn-ghost w-fit">
+        ← Volver
+      </Link>
 
+      <div className="text-center space-y-1">
+        <h1 className="h1">Crear turno</h1>
+        <p className="subtle">
+          {isFromCalendar ? "Turno preseleccionado desde la agenda." : "Elegí cliente, día y horario."}
+        </p>
+      </div>
+
+      <div className="flex justify-center">
         <AppointmentForm
           defaultValues={{
             day: day ?? "",

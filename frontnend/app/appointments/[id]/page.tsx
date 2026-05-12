@@ -26,19 +26,17 @@ export default function EditAppointmentPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] py-4">
-      <div className="flex flex-col gap-5 justify-between items-center">
-        <Link
-          href="/"
-          className="self-start mx-auto text-xl underline text-gray-500 hover:text-black transition"
-        >
-          Volver
-        </Link>
+    <div className="space-y-6">
+      <Link href="/dashboard" className="btn btn-ghost w-fit">
+        ← Volver
+      </Link>
 
-        <h1 className="text-4xl font-bold underline text-center">
-          Editar turno
-        </h1>
+      <div className="text-center space-y-1">
+        <h1 className="h1">Editar turno</h1>
+        <p className="subtle">Actualizá el cliente, día u horario.</p>
+      </div>
 
+      <div className="flex justify-center">
         <AppointmentForm
           defaultValues={{
             clientId,
@@ -57,7 +55,7 @@ export default function EditAppointmentPage() {
                 clientId: clientId,
               });
 
-              router.push("/");
+              router.push("/dashboard");
             }
           }}
           submitLabel={isPending ? "Editando..." : "Editar"}

@@ -18,14 +18,11 @@ export default function EditClientPage() {
   if (isError || !client) return <p>Error al cargar cliente</p>;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] py-4">
-      <div className="w-full max-w-md">
-        <Link
-          href="/clients"
-          className="block text-center w-full text-xl underline text-gray-500 hover:text-black transition mb-4"
-        >
-          Volver
-        </Link>
+    <div className="space-y-6">
+      <Link href="/clients" className="btn btn-ghost w-fit">
+        ← Volver
+      </Link>
+      <div className="w-full max-w-md mx-auto">
         <ClientForm
           defaultValues={client}
           submitLabel="Guardar cambios"
