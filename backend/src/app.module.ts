@@ -16,15 +16,16 @@ import { ScheduleModule } from '@nestjs/schedule';
     ScheduleModule.forRoot(),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DATABASE_HOST'),
-        port: configService.get('DATABASE_PORT'),
-        database: configService.get('DATABASE_NAME'),
-        username: configService.get('DATABASE_USER'),
+        useFactory: (configService: ConfigService) => ({
+          type: 'postgres',
+          host: configService.get('DATABASE_HOST'),
+          port: configService.get('DATABASE_PORT'),
+          database: configService.get('DATABASE_NAME'),
+          username: configService.get('DATABASE_USER'),
           password: configService.get('DATABASE_PASS'),
           autoLoadEntities: true,
-          synchronize: false,
+          // Keep disabled by default in prod. Can be temporarily enabled for bootstrapping.
+          synchronize: configService.get('TYPEORM_SYNCHRONIZE') === 'true',
           ssl: configService.get('DATABASE_HOST')?.includes('localhost')
             ? false
             : { rejectUnauthorized: false },
