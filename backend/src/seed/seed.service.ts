@@ -30,8 +30,12 @@ export class SeedService {
     );
 
     // limpiar la base de datos
-    await this.clientRepository.createQueryBuilder().delete().execute();
+    // Order matters due to FK constraints.
+    // Many-to-many join table created by TypeORM: appointment_clients_clients.
+    await this.paymentRepository.query('DELETE FROM "appointment_clients_clients"');
+    await this.paymentRepository.query('DELETE FROM "appointment"');
     await this.paymentRepository.createQueryBuilder().delete().execute();
+    await this.clientRepository.createQueryBuilder().delete().execute();
 
     // guardar clientes
     const dbClients = await this.clientRepository.save(INITIAL_DATA.clients);
