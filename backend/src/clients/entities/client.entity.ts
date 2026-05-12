@@ -28,7 +28,7 @@ export class Client {
 
   debtCount?: number;
 
-  @Column({ type: "int", default: 25000 })
+  @Column({ type: 'int', default: 30000 })
   planAmount: number;
 
   @CreateDateColumn()

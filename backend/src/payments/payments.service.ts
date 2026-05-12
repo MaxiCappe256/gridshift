@@ -18,13 +18,17 @@ export class PaymentsService {
     private readonly paymentRepository: Repository<Payment>,
   ) { }
 
-  private calculateCurrentAmount(baseAmount: number): number {
+  private calculateCurrentAmount(baseAmount: number | string): number {
+    // TypeORM returns DECIMAL columns as string by default.
+    const amount = typeof baseAmount === 'number' ? baseAmount : Number(baseAmount);
+    if (!Number.isFinite(amount)) return 0;
+
     const day = new Date().getDate();
 
-    if (day <= 15) return baseAmount;
-    if (day <= 21) return Math.round(baseAmount * 1.10)
+    if (day <= 15) return amount;
+    if (day <= 21) return Math.round(amount * 1.1);
 
-    return Math.round(baseAmount * 1.15)
+    return Math.round(amount * 1.15);
   }
 
   async getDebtDashboard(page: number = 1, limit: number = 10, term: string) {

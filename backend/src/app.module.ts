@@ -22,14 +22,14 @@ import { ScheduleModule } from '@nestjs/schedule';
         port: configService.get('DATABASE_PORT'),
         database: configService.get('DATABASE_NAME'),
         username: configService.get('DATABASE_USER'),
-        password: configService.get('DATABASE_PASS'),
-        autoLoadEntities: true,
-        synchronize: true,
-        ssl: configService.get('DATABASE_HOST')?.includes('localhost')
-          ? false
-          : { rejectUnauthorized: false },
+          password: configService.get('DATABASE_PASS'),
+          autoLoadEntities: true,
+          synchronize: false,
+          ssl: configService.get('DATABASE_HOST')?.includes('localhost')
+            ? false
+            : { rejectUnauthorized: false },
+        }),
       }),
-    }),
 
     ClientsModule,
     AppointmentsModule,
