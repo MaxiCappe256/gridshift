@@ -86,6 +86,7 @@ export default function Navbar() {
     { href: '/dashboard', label: 'Turnos' },
     { href: '/clients', label: 'Clientes' },
     { href: '/debts', label: 'Deudas' },
+    { href: '/routines', label: 'Rutinas' },
   ] as const;
 
   return (

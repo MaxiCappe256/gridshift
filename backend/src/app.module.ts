@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { PaymentsModule } from './payments/payments.module';
 import { SeedModule } from './seed/seed.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { RoutinesModule } from './routines/routines.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     AuthModule,
     PaymentsModule,
     SeedModule,
+    RoutinesModule,
   ],
   controllers: [],
   providers: [],

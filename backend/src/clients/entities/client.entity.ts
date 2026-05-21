@@ -1,5 +1,6 @@
 import { Appointment } from 'src/appointments/entities/appointment.entity';
 import { Payment } from 'src/payments/entities/payment.entity';
+import { ClientRoutineAssignment } from 'src/routines/entities/client-routine-assignment.entity';
 import {
   Column,
   CreateDateColumn,
@@ -39,4 +40,10 @@ export class Client {
 
   @OneToMany(() => Payment, (payment) => payment.client)
   payment: Payment[];
+
+  @OneToMany(
+    () => ClientRoutineAssignment,
+    (clientRoutineAssignment) => clientRoutineAssignment.client,
+  )
+  routineAssignments: ClientRoutineAssignment[];
 }
