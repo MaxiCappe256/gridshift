@@ -37,6 +37,6 @@ export class Client {
   @ManyToMany(() => Appointment, (appointment) => appointment.clients)
   appointments: Appointment[];
 
-  @OneToMany(() => Payment, (payment) => payment.client)
+  @OneToMany(() => Payment, (payment) => payment.client, { cascade: true })
   payment: Payment[];
 }

@@ -3,14 +3,17 @@ import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from './entities/client.entity';
+import { Payment } from 'src/payments/entities/payment.entity';
 import { Repository } from 'typeorm';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class ClientsService {
   constructor(
     @InjectRepository(Client)
     private readonly clientRepository: Repository<Client>,
+
+    @InjectRepository(Payment)
+    private readonly paymentRepository: Repository<Payment>,
   ) {}
 
   async create(createClientDto: CreateClientDto) {
@@ -68,6 +71,9 @@ export class ClientsService {
 
   async remove(id: number) {
     const client = await this.findOne(id);
+
+    // Eliminar pagos asociados al cliente
+    await this.paymentRepository.delete({ client: { id } });
 
     await this.clientRepository.remove(client);
 

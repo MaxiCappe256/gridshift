@@ -21,6 +21,6 @@ export class Payment {
   @Column({ type: 'timestamp', nullable: true })
   paymentDate: Date;
 
-  @ManyToOne(() => Client, (client) => client.payment)
+  @ManyToOne(() => Client, (client) => client.payment, { onDelete: 'CASCADE' })
   client: Client;
 }
