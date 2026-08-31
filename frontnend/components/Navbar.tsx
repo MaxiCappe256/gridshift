@@ -1,6 +1,7 @@
 'use client';
 
 import { useLogout } from '@/hooks/auth/useLogout';
+import ThemeToggle from '@/components/ThemeToggle';
 import Link from 'next/link';
 import { useState, useSyncExternalStore } from 'react';
 import { usePathname } from 'next/navigation';
@@ -90,12 +91,12 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50">
-      <div className="border-b border-slate-200/70 bg-white/70 backdrop-blur-xl shadow-[0_1px_0_rgba(15,23,42,0.05)]">
+      <div className="border-b border-slate-200/70 dark:border-slate-800/80 bg-white/70 dark:bg-slate-950/75 backdrop-blur-xl shadow-[0_1px_0_rgba(15,23,42,0.05)] dark:shadow-[0_1px_0_rgba(0,0,0,0.4)]">
         <div className="container-page h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsOpen((v) => !v)}
-              className="sm:hidden inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white/70 px-3 py-2 text-slate-700 shadow-sm hover:bg-white transition"
+              className="sm:hidden inline-flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-800/70 px-3 py-2 text-slate-700 dark:text-slate-200 shadow-sm hover:bg-white dark:hover:bg-slate-700 transition"
               aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'}
             >
               <span className="text-lg leading-none font-bold">
@@ -107,16 +108,16 @@ export default function Navbar() {
               href="/dashboard"
               className="group inline-flex items-center gap-2"
             >
-              <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
-                <span className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white" />
-                <span className="font-display text-lg font-extrabold text-slate-900">
+              <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+                <span className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
+                <span className="font-display text-lg font-extrabold text-slate-900 dark:text-white">
                   A
                 </span>
               </span>
-              <span className="font-display text-xl font-extrabold tracking-tight text-slate-900">
+              <span className="font-display text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 Aphild
               </span>
-              <span className="hidden md:inline-flex chip border-emerald-200/70 bg-emerald-50/60 text-emerald-800">
+              <span className="hidden md:inline-flex chip border-emerald-200/70 dark:border-emerald-800/70 bg-emerald-50/60 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
                 Gym OS
               </span>
             </Link>
@@ -135,7 +136,7 @@ export default function Navbar() {
                   className={`rounded-xl px-3.5 py-2 text-sm font-semibold transition ${
                     active
                       ? 'bg-emerald-600 text-white shadow-sm'
-                      : 'text-slate-700 hover:bg-slate-100/80'
+                      : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/80'
                   }`}
                 >
                   {item.label}
@@ -145,8 +146,9 @@ export default function Navbar() {
           </div>
 
           <div className="hidden sm:flex items-center gap-3">
+            <ThemeToggle />
             {userFullName && (
-              <span className="max-w-48 truncate rounded-xl border border-slate-200 bg-white/60 px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm">
+              <span className="max-w-48 truncate rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-800/60 px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-sm">
                 {userFullName}
               </span>
             )}
@@ -183,7 +185,7 @@ export default function Navbar() {
                       className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
                         active
                           ? 'bg-emerald-600 text-white'
-                          : 'bg-slate-50 text-slate-800 hover:bg-slate-100'
+                          : 'bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-750'
                       }`}
                     >
                       {item.label}
@@ -191,8 +193,15 @@ export default function Navbar() {
                   );
                 })}
 
+                <div className="flex items-center justify-between rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-850 px-4 py-2.5">
+                  <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                    Modo oscuro
+                  </span>
+                  <ThemeToggle />
+                </div>
+
                 {userFullName && (
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700">
+                  <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-850 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
                     {userFullName}
                   </div>
                 )}
@@ -212,3 +221,4 @@ export default function Navbar() {
     </nav>
   );
 }
+

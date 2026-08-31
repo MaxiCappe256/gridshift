@@ -1,5 +1,6 @@
 'use client';
 
+import { usePlans } from '@/hooks/plans/usePlans';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -28,10 +29,14 @@ export default function ClientForm({
   onDelete,
   clientId,
 }: Props) {
+  const { data: plans, isLoading: isLoadingPlans } = usePlans();
+
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<ClientFormData>({
     defaultValues: defaultValues,
@@ -43,8 +48,10 @@ export default function ClientForm({
   useEffect(() => {
     if (defaultValues) {
       reset(defaultValues);
+    } else if (plans && plans.length > 0 && !watch('planAmount')) {
+      setValue('planAmount', plans[0].price);
     }
-  }, [defaultValues, reset]);
+  }, [defaultValues, plans, reset, setValue, watch]);
 
   const handleInternalSubmit = (data: ClientFormData) => {
     const formattedData = {
@@ -112,13 +119,24 @@ export default function ClientForm({
 
         {/* PLAN */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-semibold text-slate-700">Plan del cliente</label>
+          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Plan del cliente</label>
           <select
             {...register('planAmount', { required: true, valueAsNumber: true })}
             className="select"
+            disabled={isLoadingPlans}
           >
-            <option value={25000}>Plan Básico ($25.000)</option>
-            <option value={50000}>Plan Pro ($50.000)</option>
+            {plans && plans.length > 0 ? (
+              plans.map((plan) => (
+                <option key={plan.id} value={plan.price}>
+                  {plan.name} (${plan.price.toLocaleString('es-AR')})
+                </option>
+              ))
+            ) : (
+              <>
+                <option value={25000}>Plan Básico ($25.000)</option>
+                <option value={50000}>Plan Pro ($50.000)</option>
+              </>
+            )}
           </select>
         </div>
 

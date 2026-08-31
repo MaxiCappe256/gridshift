@@ -78,10 +78,10 @@ export default function AppointmentForm({
         className="card card-pad w-[92vw] sm:w-[520px] space-y-4"
       >
         <div className="relative flex flex-col gap-2">
-          <label className="text-sm font-semibold text-slate-700">Cliente</label>
+          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Cliente</label>
 
           {defaultValues?.clientId ? (
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 font-semibold text-slate-900">
+            <div className="rounded-2xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/60 px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">
               {clientName || "Cargando..."}
               <input
                 type="hidden"
@@ -101,7 +101,7 @@ export default function AppointmentForm({
                 }}
               />
               {isOpen && (
-                <ul className="absolute top-full left-0 right-0 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white/95 backdrop-blur shadow-(--shadow-lg) max-h-56 overflow-y-auto z-50">
+                <ul className="absolute top-full left-0 right-0 mt-2 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-800 backdrop-blur shadow-(--shadow-lg) max-h-56 overflow-y-auto z-50">
                   {filteredClients.map((client) => (
                     <li
                       key={client.id}
@@ -114,15 +114,15 @@ export default function AppointmentForm({
                         });
                         setIsOpen(false);
                       }}
-                      className="px-4 py-3 hover:bg-emerald-50 cursor-pointer text-sm border-b border-slate-200/70 last:border-none"
+                      className="px-4 py-3 hover:bg-emerald-50 dark:hover:bg-slate-700 cursor-pointer text-sm border-b border-slate-200/70 dark:border-slate-700/70 last:border-none"
                     >
-                      <span className="font-semibold text-slate-900">
+                      <span className="font-semibold text-slate-900 dark:text-slate-100">
                         {client.name} {client.surname}
                       </span>
                     </li>
                   ))}
                   {filteredClients.length === 0 && (
-                    <li className="px-4 py-3 text-slate-400 text-sm">
+                    <li className="px-4 py-3 text-slate-400 dark:text-slate-500 text-sm">
                       No se encontraron clientes
                     </li>
                   )}
@@ -138,11 +138,11 @@ export default function AppointmentForm({
 
         {/* DÍA */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-semibold text-slate-700">Día</label>
+          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Día</label>
           {lockDateTime ? (
             <input
               disabled
-              className="input bg-slate-50 text-slate-500"
+              className="input bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400"
               {...register("day")}
             />
           ) : (
@@ -162,11 +162,11 @@ export default function AppointmentForm({
 
         {/* HORA */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-semibold text-slate-700">Hora</label>
+          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Hora</label>
           {lockDateTime ? (
             <input
               disabled
-              className="input bg-slate-50 text-slate-500"
+              className="input bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400"
               {...register("hour")}
             />
           ) : (

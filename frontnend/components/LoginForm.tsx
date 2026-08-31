@@ -22,37 +22,42 @@ export default function LoginForm() {
 
   return (
     <form
-      className="flex justify-center items-stretch w-full flex-col gap-3"
+      className="flex justify-center items-stretch w-full flex-col gap-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="space-y-1">
-        <label className="text-sm font-semibold text-slate-700">Email</label>
-      <input
-        type="email"
-        placeholder="Email"
-        className="input"
-        {...register("email", { required: true })}
-      />
-      {errors.email && (
-        <span className="text-red-500 text-sm">Email requerido</span>
-      )}
+      <div className="space-y-1.5">
+        <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+          Email
+        </label>
+        <input
+          type="email"
+          placeholder="Email..."
+          className="input"
+          {...register("email", { required: true })}
+        />
+        {errors.email && (
+          <span className="text-red-500 text-xs font-medium">Email requerido</span>
+        )}
       </div>
 
-      <div className="space-y-1">
-        <label className="text-sm font-semibold text-slate-700">Contraseña</label>
-      <input
-        type="password"
-        placeholder="Password"
-        className="input"
-        {...register("password", { required: true })}
-      />{" "}
-      {errors.password && (
-        <span className="text-red-500 text-sm">Password requerido</span>
-      )}
+      <div className="space-y-1.5">
+        <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+          Contraseña
+        </label>
+        <input
+          type="password"
+          placeholder="Contraseña..."
+          className="input"
+          {...register("password", { required: true })}
+        />
+        {errors.password && (
+          <span className="text-red-500 text-xs font-medium">Contraseña requerida</span>
+        )}
       </div>
+
       <button
         disabled={isPending}
-        className="btn btn-primary w-full mt-1"
+        className="btn btn-primary w-full mt-2 py-3 shadow-md shadow-emerald-500/20"
       >
         {isPending ? "Iniciando..." : "Iniciar sesión"}
       </button>
