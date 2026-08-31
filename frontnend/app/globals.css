@@ -80,7 +80,7 @@
   }
 
   .page-pad {
-    @apply py-8 sm:py-10;
+    @apply pt-8 pb-28 sm:py-10;
   }
 
   .page-top {

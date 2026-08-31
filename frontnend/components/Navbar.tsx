@@ -2,6 +2,7 @@
 
 import { useLogout } from '@/hooks/auth/useLogout';
 import ThemeToggle from '@/components/ThemeToggle';
+import BottomNav from '@/components/BottomNav';
 import Link from 'next/link';
 import { useState, useSyncExternalStore } from 'react';
 import { usePathname } from 'next/navigation';
@@ -90,134 +91,139 @@ export default function Navbar() {
   ] as const;
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50">
-      <div className="border-b border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/90 backdrop-blur-xl shadow-xs dark:shadow-md">
-        <div className="container-page h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setIsOpen((v) => !v)}
-              className="sm:hidden inline-flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800 px-3 py-2 text-slate-700 dark:text-slate-200 shadow-sm hover:bg-white dark:hover:bg-slate-700 transition"
-              aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'}
-            >
-              <span className="text-lg leading-none font-bold">
-                {isOpen ? '×' : '≡'}
-              </span>
-            </button>
-
-            <Link
-              href="/dashboard"
-              className="group inline-flex items-center gap-2"
-            >
-              <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm">
-                <span className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
-                <span className="font-display text-lg font-extrabold text-slate-900 dark:text-white">
-                  A
+    <>
+      <nav className="fixed top-0 left-0 w-full z-50">
+        <div className="border-b border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/90 backdrop-blur-xl shadow-xs dark:shadow-md">
+          <div className="container-page h-16 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsOpen((v) => !v)}
+                className="sm:hidden inline-flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800 px-3 py-2 text-slate-700 dark:text-slate-200 shadow-sm hover:bg-white dark:hover:bg-slate-700 transition"
+                aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'}
+              >
+                <span className="text-lg leading-none font-bold">
+                  {isOpen ? '×' : '≡'}
                 </span>
-              </span>
-              <span className="font-display text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                Aphild
-              </span>
-              <span className="hidden md:inline-flex chip border-emerald-200/70 dark:border-emerald-700/60 bg-emerald-50/60 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
-                Gym OS
-              </span>
-            </Link>
-          </div>
+              </button>
 
-          <div className="hidden sm:flex items-center gap-2">
-            {navItems.map((item) => {
-              const active =
-                pathname === item.href ||
-                (item.href !== '/dashboard' && pathname?.startsWith(item.href));
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`rounded-xl px-3.5 py-2 text-sm font-semibold transition ${
-                    active
-                      ? 'bg-emerald-600 text-white shadow-sm'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800'
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
-
-          <div className="hidden sm:flex items-center gap-3">
-            <ThemeToggle />
-            {userFullName && (
-              <span className="max-w-48 truncate rounded-xl border border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-slate-800/80 px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-sm">
-                {userFullName}
-              </span>
-            )}
-            <button
-              className="btn btn-danger cursor-pointer"
-              onClick={() => logoutMutate()}
-              disabled={isPending}
-            >
-              {isPending ? 'Cerrando sesión...' : 'Cerrar sesión'}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile */}
-        <div
-          className={`sm:hidden overflow-hidden transition-[max-height,opacity] duration-200 ${
-            isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-          }`}
-        >
-          <div className="container-page pb-4">
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-xl">
-              <div className="grid gap-2">
-                {navItems.map((item) => {
-                  const active =
-                    pathname === item.href ||
-                    (item.href !== '/dashboard' &&
-                      pathname?.startsWith(item.href));
-
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
-                        active
-                          ? 'bg-emerald-600 text-white'
-                          : 'bg-slate-50 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-750'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
-
-                <div className="flex items-center justify-between rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5">
-                  <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
-                    Modo oscuro
+              <Link
+                href="/dashboard"
+                className="group inline-flex items-center gap-2"
+              >
+                <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm">
+                  <span className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
+                  <span className="font-display text-lg font-extrabold text-slate-900 dark:text-white">
+                    A
                   </span>
-                  <ThemeToggle />
-                </div>
+                </span>
+                <span className="font-display text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                  Aphild
+                </span>
+                <span className="hidden md:inline-flex chip border-emerald-200/70 dark:border-emerald-700/60 bg-emerald-50/60 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
+                  Gym OS
+                </span>
+              </Link>
+            </div>
 
-                {userFullName && (
-                  <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
-                    {userFullName}
+            <div className="hidden sm:flex items-center gap-2">
+              {navItems.map((item) => {
+                const active =
+                  pathname === item.href ||
+                  (item.href !== '/dashboard' && pathname?.startsWith(item.href));
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`rounded-xl px-3.5 py-2 text-sm font-semibold transition ${
+                      active
+                        ? 'bg-emerald-600 text-white shadow-sm'
+                        : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+
+            <div className="hidden sm:flex items-center gap-3">
+              <ThemeToggle />
+              {userFullName && (
+                <span className="max-w-48 truncate rounded-xl border border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-slate-800/80 px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-sm">
+                  {userFullName}
+                </span>
+              )}
+              <button
+                className="btn btn-danger cursor-pointer"
+                onClick={() => logoutMutate()}
+                disabled={isPending}
+              >
+                {isPending ? 'Cerrando sesión...' : 'Cerrar sesión'}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Dropdown */}
+          <div
+            className={`sm:hidden overflow-hidden transition-[max-height,opacity] duration-200 ${
+              isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+            }`}
+          >
+            <div className="container-page pb-4">
+              <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-xl">
+                <div className="grid gap-2">
+                  {navItems.map((item) => {
+                    const active =
+                      pathname === item.href ||
+                      (item.href !== '/dashboard' &&
+                        pathname?.startsWith(item.href));
+
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setIsOpen(false)}
+                        className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
+                          active
+                            ? 'bg-emerald-600 text-white'
+                            : 'bg-slate-50 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-750'
+                        }`}
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+
+                  <div className="flex items-center justify-between rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-2.5">
+                    <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                      Modo oscuro
+                    </span>
+                    <ThemeToggle />
                   </div>
-                )}
 
-                <button
-                  className="btn btn-danger mt-2"
-                  onClick={() => logoutMutate()}
-                  disabled={isPending}
-                >
-                  {isPending ? 'Cerrando sesión...' : 'Cerrar sesión'}
-                </button>
+                  {userFullName && (
+                    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
+                      {userFullName}
+                    </div>
+                  )}
+
+                  <button
+                    className="btn btn-danger mt-2"
+                    onClick={() => logoutMutate()}
+                    disabled={isPending}
+                  >
+                    {isPending ? 'Cerrando sesión...' : 'Cerrar sesión'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <BottomNav />
+    </>
   );
 }
