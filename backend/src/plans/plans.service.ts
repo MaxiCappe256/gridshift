@@ -28,26 +28,45 @@ export class PlansService implements OnModuleInit {
   }
 
   async ensureDefaultPlans() {
-    const count = await this.planRepository.count();
-    if (count === 0) {
-      this.logger.log('Inicializando planes por defecto...');
-      const defaultPlans = [
-        {
-          name: 'Plan Básico',
-          code: 'basico',
-          price: 25000,
-          description: 'Acceso estándar de entrenamiento',
-        },
-        {
-          name: 'Plan Pro',
-          code: 'pro',
-          price: 50000,
-          description: 'Acceso completo con seguimiento',
-        },
-      ];
+    try {
+      // Garantizar que la tabla exista en producción (Railway) aún con synchronize=false
+      await this.planRepository.query(`
+        CREATE TABLE IF NOT EXISTS "plans" (
+          "id" SERIAL NOT NULL,
+          "name" character varying(60) NOT NULL,
+          "code" character varying(40) NOT NULL,
+          "price" integer NOT NULL,
+          "description" character varying(255),
+          "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
+          CONSTRAINT "UQ_plans_name" UNIQUE ("name"),
+          CONSTRAINT "UQ_plans_code" UNIQUE ("code"),
+          CONSTRAINT "PK_plans_id" PRIMARY KEY ("id")
+        );
+      `);
 
-      await this.planRepository.save(defaultPlans);
-      this.logger.log('Planes por defecto creados con éxito.');
+      const count = await this.planRepository.count();
+      if (count === 0) {
+        this.logger.log('Inicializando planes por defecto...');
+        const defaultPlans = [
+          {
+            name: 'Plan Básico',
+            code: 'basico',
+            price: 25000,
+            description: 'Acceso estándar de entrenamiento',
+          },
+          {
+            name: 'Plan Pro',
+            code: 'pro',
+            price: 50000,
+            description: 'Acceso completo con seguimiento',
+          },
+        ];
+
+        await this.planRepository.save(defaultPlans);
+        this.logger.log('Planes por defecto creados con éxito.');
+      }
+    } catch (error) {
+      this.logger.error('Error al verificar/inicializar planes:', error);
     }
   }
 
