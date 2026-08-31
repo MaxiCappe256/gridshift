@@ -13,7 +13,7 @@ export default function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="h-9 w-9 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-800/70" />
+      <div className="h-9 w-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800/70" />
     );
   }
 
@@ -23,7 +23,7 @@ export default function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-850 dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-xs hover:bg-white dark:hover:bg-slate-700 transition focus:outline-hidden"
+      className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-xs hover:bg-white dark:hover:bg-slate-700 transition focus:outline-hidden"
       aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
       title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
     >
